@@ -38,3 +38,7 @@ out/
 
 /logs/
 
+# Ignore application properties files
+application.properties
+application-test.properties
+
