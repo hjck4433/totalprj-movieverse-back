@@ -14,11 +14,16 @@ public class Member {
     @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
     private String password;
+    @Column(name="name", nullable = false)
     private String name;
+    @Column(name="alias", nullable = false, unique = true)
     private String alias;
+    @Column(name="phone", nullable = false, unique = true)
     private String phone;
+    @Column(name="addr", nullable = false)
     private String addr;
     private String image;
 
