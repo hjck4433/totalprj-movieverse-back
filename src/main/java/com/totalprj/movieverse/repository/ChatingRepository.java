@@ -1,12 +1,12 @@
 package com.totalprj.movieverse.repository;
 
-import com.totalprj.movieverse.entity.Category;
+import com.totalprj.movieverse.entity.Chating;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Long> {
-//    List<Category> findByMemberEmail(String email);
+public interface ChatingRepository extends JpaRepository<Chating, Long> {
+//    List<Chating> findByChating(Chating chating);
 }
