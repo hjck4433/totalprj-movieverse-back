@@ -12,11 +12,11 @@ import java.util.Optional;
 
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
-//    boolean existsByRefreshToken(String refreshToken);
-//    boolean exitsByMember(Member member);
-//    Optional<RefreshToken> findByMember(Member member);
-//
-//    @Modifying
-//    @Query("DELETE FROM RefreshToken r WHERE r.member = :member")
-//    void deleteByMember(@Param("member") Member member);
+    boolean existsByRefreshToken(String refreshToken);
+    boolean existsByMember(Member member);
+    Optional<RefreshToken> findByMember(Member member);
+
+    @Modifying
+    @Query("DELETE FROM RefreshToken r WHERE r.member = :member")
+    void deleteByMember(@Param("member") Member member);
 }
