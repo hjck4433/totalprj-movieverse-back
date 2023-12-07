@@ -7,6 +7,7 @@ import com.totalprj.movieverse.entity.Member;
 import com.totalprj.movieverse.repository.BoardRepository;
 import com.totalprj.movieverse.repository.CategoryRepository;
 import com.totalprj.movieverse.repository.MemberRepository;
+import com.totalprj.movieverse.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class BoardService {
     }
 
     // 게시물 전체 조회
-    public List<BoardDto> getBoardList() {
+    public List<BoardDto> BoardList() {
         List<Board> boards = boardRepository.findAll();
         List<BoardDto> boardDtos = new ArrayList<>();
         for (Board board : boards) {
@@ -56,10 +57,9 @@ public class BoardService {
         return boardDtos;
     }
     // 게시물 상세 조회
-    public BoardDto getBoardDetail(Long id, BoardDto boardDto) {
-        Member member = memberRepository.findByEmail(boardDto.getEmail()).orElseThrow(
-                () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
-        );
+    public BoardDto BoardDetail(BoardDto boardDto) {
+        Long id = SecurityUtil.getCurrentMemberId();
+        Member member = memberRepository.findById(id).orElseThrow();
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("해당 게시글이 존재하지 않습니다.")
         );
