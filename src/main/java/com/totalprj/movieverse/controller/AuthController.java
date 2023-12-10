@@ -1,5 +1,7 @@
 package com.totalprj.movieverse.controller;
 
+import com.totalprj.movieverse.dto.MemberReqDto;
+import com.totalprj.movieverse.dto.MemberResDto;
 import com.totalprj.movieverse.service.AuthService;
 import com.totalprj.movieverse.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +22,10 @@ public class AuthController {
     public ResponseEntity<Boolean> isUnique (@RequestBody Map<String, String> dataMap) {
         int type = Integer.parseInt(dataMap.get("type"));
         return ResponseEntity.ok(authService.checkUnique(type, dataMap.get("data")));
+    }
+
+    @PostMapping("/join")
+    public ResponseEntity<MemberResDto> join(@RequestBody MemberReqDto memberReqDto) {
+        return ResponseEntity.ok(authService.join(memberReqDto));
     }
 }

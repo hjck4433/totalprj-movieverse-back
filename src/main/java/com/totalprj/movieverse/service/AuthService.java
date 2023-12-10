@@ -1,5 +1,8 @@
 package com.totalprj.movieverse.service;
 
+import com.totalprj.movieverse.dto.MemberReqDto;
+import com.totalprj.movieverse.dto.MemberResDto;
+import com.totalprj.movieverse.entity.Member;
 import com.totalprj.movieverse.jwt.TokenProvider;
 import com.totalprj.movieverse.repository.MemberRepository;
 import com.totalprj.movieverse.repository.RefreshTokenRepository;
@@ -37,4 +40,13 @@ public class AuthService {
         }
         return isUnique;
     }
+
+    public MemberResDto join(MemberReqDto memberReqDto) {
+        if(memberRepository.existsByEmail(memberReqDto.getEmail())){
+            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+        }
+        Member member = memberReqDto.toEntity(passwordEncoder);
+        return MemberResDto.of(memberRepository.save(member));
+    }
+
 }
