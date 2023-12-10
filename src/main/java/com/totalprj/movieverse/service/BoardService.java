@@ -24,28 +24,28 @@ public class BoardService {
     private final MemberRepository memberRepository;
 
     // 게시물 등록
-    public boolean saveBoard(BoardDto boardDto) {
-        try {
-            Board board = new Board();
-            Member member = memberRepository.findByEmail(boardDto.getEmail()).orElseThrow(
-                    () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
-            );
-            Category category = categoryRepository.findById(boardDto.getCategoryId()).orElseThrow(
-                    () -> new RuntimeException("해당 카테고리가 존재하지 않습니다.")
-            );
-
-            board.setTitle(boardDto.getTitle());
-            board.setCategory(category);
-            board.setBoardContent(boardDto.getContent());
-            board.setImage(boardDto.getImage());
-            board.setMember(member);
-            boardRepository.save(board);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    public boolean saveBoard(BoardDto boardDto) {
+//        try {
+//            Board board = new Board();
+//            Member member = memberRepository.findByEmail(boardDto.getEmail()).orElseThrow(
+//                    () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
+//            );
+//            Category category = categoryRepository.findById(boardDto.getCategoryId()).orElseThrow(
+//                    () -> new RuntimeException("해당 카테고리가 존재하지 않습니다.")
+//            );
+//
+//            board.setTitle(boardDto.getTitle());
+//            board.setCategory(category);
+//            board.setBoardContent(boardDto.getContent());
+//            board.setImage(boardDto.getImage());
+//            board.setMember(member);
+//            boardRepository.save(board);
+//            return true;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
     // 게시물 전체 조회
     public List<BoardDto> BoardList() {
