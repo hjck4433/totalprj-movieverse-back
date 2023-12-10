@@ -2,13 +2,17 @@ package com.totalprj.movieverse.service;
 
 import com.totalprj.movieverse.dto.MemberReqDto;
 import com.totalprj.movieverse.dto.MemberResDto;
+import com.totalprj.movieverse.dto.TokenDto;
 import com.totalprj.movieverse.entity.Member;
+import com.totalprj.movieverse.entity.RefreshToken;
 import com.totalprj.movieverse.jwt.TokenProvider;
 import com.totalprj.movieverse.repository.MemberRepository;
 import com.totalprj.movieverse.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +51,36 @@ public class AuthService {
         }
         Member member = memberReqDto.toEntity(passwordEncoder);
         return MemberResDto.of(memberRepository.save(member));
+    }
+
+    public TokenDto login(MemberReqDto memberReqDto) {
+        UsernamePasswordAuthenticationToken authenticationToken = memberReqDto.toAuthentication();
+        log.info("authenticationToken : {}", authenticationToken);
+
+        Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+        log.info("authentication : {}", authentication);
+
+        TokenDto token = tokenProvider.generateTokenDto(authentication);
+
+        //refreshToken DB에 저장
+        Member member = memberRepository.findByEmail(memberReqDto.getEmail())
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 이메일입니다."));
+
+        // 이미 db에 해당 계정으로 저장된 refreshToken 정보가 있다면 삭제
+        log.info("Exists by member: {}", refreshTokenRepository.existsByMember(member));
+        if(refreshTokenRepository.existsByMember(member)) {
+            refreshTokenRepository.deleteByMember(member);
+        }
+
+        RefreshToken refreshToken = new RefreshToken();
+        String encodedToken = token.getRefreshToken();
+        refreshToken.setRefreshToken(encodedToken.concat("="));
+        refreshToken.setRefreshTokenExpiresIn(token.getRefreshTokenExpiresIn());
+        refreshToken.setMember(member);
+
+        refreshTokenRepository.save(refreshToken);
+
+        return token;
     }
 
 }

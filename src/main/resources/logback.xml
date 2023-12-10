@@ -11,6 +11,11 @@
         <file>logs/log.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logs/log_%d{yyyyMMdd}.log</fileNamePattern>
+            <!-- Maximum file size (5MB) before rollover -->
+            <totalSizeCap>5MB</totalSizeCap>
+
+            <!-- Number of days to keep old log files (15 days) -->
+            <maxHistory>15</maxHistory>
         </rollingPolicy>
 
         <encoder>
