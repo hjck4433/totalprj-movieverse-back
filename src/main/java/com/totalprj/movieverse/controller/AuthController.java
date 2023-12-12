@@ -1,5 +1,6 @@
 package com.totalprj.movieverse.controller;
 
+import com.totalprj.movieverse.dto.AccessTokenDto;
 import com.totalprj.movieverse.dto.MemberReqDto;
 import com.totalprj.movieverse.dto.MemberResDto;
 import com.totalprj.movieverse.dto.TokenDto;
@@ -37,6 +38,13 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody MemberReqDto memberReqDto) {
         return ResponseEntity.ok(authService.login(memberReqDto));
+    }
+
+    // 리프레시 토큰으로 새 액세스 토큰 발급
+    @PostMapping("/refresh")
+    public ResponseEntity<AccessTokenDto> newToken(@RequestBody String refreshToken) {
+        log.info("refreshToken: {}", refreshToken);
+        return ResponseEntity.ok(authService.refreshAccessToken(refreshToken));
     }
 
 }

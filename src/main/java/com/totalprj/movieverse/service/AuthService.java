@@ -1,5 +1,6 @@
 package com.totalprj.movieverse.service;
 
+import com.totalprj.movieverse.dto.AccessTokenDto;
 import com.totalprj.movieverse.dto.MemberReqDto;
 import com.totalprj.movieverse.dto.MemberResDto;
 import com.totalprj.movieverse.dto.TokenDto;
@@ -81,6 +82,25 @@ public class AuthService {
         refreshTokenRepository.save(refreshToken);
 
         return token;
+    }
+
+    // 리프레시 토큰올 액세스 토큰 재 발급
+    public AccessTokenDto refreshAccessToken(String refreshToken) {
+        log.info("refreshToken : {}", refreshToken);
+        log.info("refreshExist : {}", refreshTokenRepository.existsByRefreshToken(refreshToken));
+
+        //DB에 일치하는 refreshToken이 있으면
+        if(refreshTokenRepository.existsByRefreshToken(refreshToken)) {
+            // refreshToken 검증
+            try {
+                if(tokenProvider.validateToken(refreshToken)) {
+                    return tokenProvider.generateAccessTokenDto(tokenProvider.getAuthentication(refreshToken));
+                }
+            }catch (RuntimeException e) {
+                log.error("토큰 유효성 검증 중 예외 발생 : {}", e.getMessage());
+            }
+        }
+        return null;
     }
 
 }
