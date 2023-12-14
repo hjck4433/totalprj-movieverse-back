@@ -12,14 +12,13 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name="chating")
+@Table(name="chat_room")
 @ToString
 @NoArgsConstructor
-public class Chating {
+public class ChatRoom {
     @Id // 이 Id는 PRIMARY KEY로 들어가는것을 의미
-    @Column(name="chating_id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name="room_id")
+    private String roomId;
     @Column(name="room_name")
     private String roomName;
     @Column(name = "created_at")
