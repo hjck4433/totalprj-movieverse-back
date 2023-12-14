@@ -19,15 +19,15 @@ import javax.transaction.Transactional;
 @Transactional
 @Service
 @RequiredArgsConstructor
-public class MovieSaveservice {
-    @Value("${api.serviceKey}")
+public class MovieSaveService {
+//    @Value("${api.serviceKey}")`
     private String key;
     private final MovieRepository movieRepository;
 
     @Scheduled(cron = "0 0 0 * * *") // 스케줄러에 등록 후 매일 자정에 실행하는 어노테이션
     public void startScheduler(){
         String response = movieListApi();
-        listFromJsonObj(response);
+//        listFromJsonObj(response);
     }
 
 
@@ -52,24 +52,24 @@ public class MovieSaveservice {
         return response;
     }
 
-    public boolean listFromJsonObj(String result){
-        // xml 데이터를 json 데이터로 변환
-        JSONObject xmlToJson = XML.toJSONObject(result);
-
-        // JSONObject로 데이터 가져오기
-        JSONObject jsonObj = xmlToJson.getJSONObject("dbs");
-
-        // 배열형식이니 JSONArray로 가져오기
-        JSONArray jsonArr = jsonObj.getJSONArray("db");
-
-        //db에 저장
-        for(int i = 0; i < jsonArr.length(); i++){
-            JSONObject item = (JSONObject) jsonArr.get(i);
-//            PlayInfo playInfo = new PlayInfo(item);
-            movieRepository.save(playInfo);
-        }
-        System.out.println("DB에 저장");
-        return true;
-    }
+//    public boolean listFromJsonObj(String result){
+//        // xml 데이터를 json 데이터로 변환
+//        JSONObject xmlToJson = XML.toJSONObject(result);
+//
+//        // JSONObject로 데이터 가져오기
+//        JSONObject jsonObj = xmlToJson.getJSONObject("dbs");
+//
+//        // 배열형식이니 JSONArray로 가져오기
+//        JSONArray jsonArr = jsonObj.getJSONArray("db");
+//
+//        //db에 저장
+//        for(int i = 0; i < jsonArr.length(); i++){
+//            JSONObject item = (JSONObject) jsonArr.get(i);
+////            PlayInfo playInfo = new PlayInfo(item);
+//            movieRepository.save(playInfo);
+//        }
+//        System.out.println("DB에 저장");
+//        return true;
+//    }
 }
 
