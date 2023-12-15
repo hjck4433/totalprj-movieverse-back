@@ -1,11 +1,11 @@
 package com.totalprj.movieverse.service;
 
+import com.totalprj.movieverse.dto.MovieDto;
 import com.totalprj.movieverse.entity.Movie;
 import com.totalprj.movieverse.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,5 +18,32 @@ public class MovieService {
     public void saveMovie(Movie movie) {
         movieRepository.save(movie);
     }
+
+    // DTO 변환
+    private MovieDto convertEntityToDto(Movie movie) {
+        MovieDto movieDto = new MovieDto();
+        movieDto.setTitle(movie.getTitle());
+        movieDto.setPosters(movie.getPosters());
+        movieDto.setTitleEng(movie.getTitleEng());
+        movieDto.setReprlsDate(movie.getReprlsDate());
+        movieDto.setGenre(movie.getGenre());
+        movieDto.setNation(movie.getNation());
+        movieDto.setRating(movie.getRating());
+        movieDto.setRuntime(movie.getRuntime());
+        movieDto.setAudiAcc(movie.getAudiAcc());
+        movieDto.setDirectorNm(movie.getDirectorNm());
+        movieDto.setActorNm(movie.getActorNm());
+        movieDto.setPlotText(movie.getPlotText());
+        movieDto.setStlls(movie.getStlls());
+        return movieDto;
+    }
+    // 타이틀, 개봉날짜 정보 뽑아내기 List<Map<String, String>>
+
+
+    // 타이틀, 개봉날짜 정보로 이미 있는 자료인지 체크
+
+
+    // Entity 변환
+
 
 }

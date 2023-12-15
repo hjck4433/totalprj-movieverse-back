@@ -42,7 +42,7 @@ public class Movie {
     private String runtime;
 
     @Column(name="movie_audience") // 누적 관객
-    private int audiAcc;
+    private String audiAcc;
 
     @Column(name="movie_director") // 감독
     private String directorNm;
