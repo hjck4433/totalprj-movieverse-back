@@ -3,6 +3,8 @@ package com.totalprj.movieverse.dto;
 import com.totalprj.movieverse.entity.Member;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,6 +18,8 @@ public class MemberResDto {
     private String addr;
     private String image;
     private Boolean isMembership;
+    private Boolean isKakao;
+    private LocalDateTime regDate;
 
     //Member -> MemberResDto
     public static MemberResDto of(Member member) {
@@ -27,6 +31,8 @@ public class MemberResDto {
                 .addr(member.getAddr())
                 .image(member.getImage())
                 .isMembership(member.isMembership())
+                .isKakao(member.isKakao())
+                .regDate(member.getRegDate())
                 .build();
     }
 }

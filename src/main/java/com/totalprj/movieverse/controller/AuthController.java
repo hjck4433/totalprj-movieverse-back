@@ -31,6 +31,7 @@ public class AuthController {
     // 회원가입
     @PostMapping("/join")
     public ResponseEntity<MemberResDto> join(@RequestBody MemberReqDto memberReqDto) {
+        log.info("memberReqDto : {}", memberReqDto);
         return ResponseEntity.ok(authService.join(memberReqDto));
     }
 

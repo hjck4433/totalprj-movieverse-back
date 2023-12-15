@@ -4,6 +4,7 @@ import com.totalprj.movieverse.constant.Authority;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="member")
@@ -32,12 +33,21 @@ public class Member {
     @Column(name = "is_withdraw", columnDefinition = "TINYINT(1)")
     private boolean isWithdraw;
 
+    @Column(name = "is_kakao", columnDefinition = "TINYINT(1)")
+    private boolean isKakao;
+
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    private LocalDateTime regDate;
+    @PrePersist
+    public void prePersist() {
+        regDate = LocalDateTime.now();
+    }
+
     // Jwt를 위한 빌더
     @Builder
-    public Member(String email, String password, String name, String alias, String phone, String addr, String image, boolean isMembership, boolean isWithdraw, Authority authority) {
+    public Member(String email, String password, String name, String alias, String phone, String addr, String image, boolean isMembership, boolean isWithdraw,boolean isKakao ,Authority authority) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -45,8 +55,10 @@ public class Member {
         this.phone = phone;
         this.addr = addr;
         this.image = image;
+        this.regDate = LocalDateTime.now();
         this.isMembership = isMembership;
         this.isWithdraw = isWithdraw;
+        this.isKakao = isKakao;
         this.authority = authority;
     }
 }
