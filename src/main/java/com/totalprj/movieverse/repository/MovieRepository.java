@@ -11,5 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
-    Optional<Movie> findBytitleAnddirectorNm(String title, String directorNm);
+    Optional<Movie> findByTitleAndDirectorNm(String title, String directorNm);
 }
