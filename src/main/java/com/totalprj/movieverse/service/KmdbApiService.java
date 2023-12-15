@@ -26,31 +26,31 @@ import java.util.List;
 @RequiredArgsConstructor
 @EnableScheduling
 public class KmdbApiService {
-    private final MovieRepository movieRepository;
-
-    @Bean
-    @Scheduled(cron = "0 1 * * * *") // 스케줄러에 등록 후 매분 실행
-    public void movieScheduler() {
-        log.info("schedule start!");
-        List<MovieDto> response = kmdbApiList();
-        log.info("python response : {}", response);
-    }
-
-    public List<MovieDto> kmdbApiList() {
-        RestTemplate restTemplate = new RestTemplate();
-        String apiUrl = "http://localhost:5000/api/apilist";
-        ResponseEntity<List<MovieDto>> responseEntity = restTemplate.exchange(
-                apiUrl,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<MovieDto>>() {});
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
-            return responseEntity.getBody();
-        } else {
-            log.error("Request failed with status code: {}", responseEntity.getStatusCodeValue());
-            return null;
-        }
-    }
+//    private final MovieRepository movieRepository;
+//
+//    @Bean
+//    @Scheduled(cron = "0 1 * * * *") // 스케줄러에 등록 후 매분 실행
+//    public void movieScheduler() {
+//        log.info("schedule start!");
+//        List<MovieDto> response = kmdbApiList();
+//        log.info("python response : {}", response);
+//    }
+//
+//    public List<MovieDto> kmdbApiList() {
+//        RestTemplate restTemplate = new RestTemplate();
+//        String apiUrl = "http://localhost:5000/api/apilist";
+//        ResponseEntity<List<MovieDto>> responseEntity = restTemplate.exchange(
+//                apiUrl,
+//                HttpMethod.GET,
+//                null,
+//                new ParameterizedTypeReference<List<MovieDto>>() {});
+//        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+//            return responseEntity.getBody();
+//        } else {
+//            log.error("Request failed with status code: {}", responseEntity.getStatusCodeValue());
+//            return null;
+//        }
+//    }
 
 
 }
