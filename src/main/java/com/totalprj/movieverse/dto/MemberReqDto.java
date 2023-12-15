@@ -19,7 +19,7 @@ public class MemberReqDto {
     private String phone;
     private String addr;
     private String image;
-    private boolean isKakao;
+    private Boolean isKakao;
     //MemberReqDto -> Member
     public Member toEntity(PasswordEncoder passwordEncoder) {
         return Member.builder()
