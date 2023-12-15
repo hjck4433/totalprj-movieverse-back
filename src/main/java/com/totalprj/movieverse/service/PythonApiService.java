@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +24,6 @@ public class PythonApiService {
 
 //    @Bean
 //    @Scheduled(cron = "0 1 * * * *")
-////    @PostConstruct
 //    public void startScheduler(){
 //        log.info("schedule start!");
 //        List<Map<String, List<Map<String, String>>>> response = fetchDataFromPythonServer();
@@ -48,12 +46,7 @@ public class PythonApiService {
 //            return null;
 //        }
 //    }
-//
-//
-//
-//
-//
-//
+
 //// DB에 저장한 정보 비우기
 //
 //// 현재상영작 list(Map) 저장

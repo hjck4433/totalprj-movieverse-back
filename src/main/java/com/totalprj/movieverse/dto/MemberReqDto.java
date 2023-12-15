@@ -19,7 +19,7 @@ public class MemberReqDto {
     private String phone;
     private String addr;
     private String image;
-
+    private boolean isKakao;
     //MemberReqDto -> Member
     public Member toEntity(PasswordEncoder passwordEncoder) {
         return Member.builder()
@@ -33,6 +33,7 @@ public class MemberReqDto {
                 .isMembership(false)
                 .isWithdraw(false)
                 .authority(Authority.ROLE_USER)
+                .isKakao(isKakao)
                 .build();
     }
     public UsernamePasswordAuthenticationToken toAuthentication() {

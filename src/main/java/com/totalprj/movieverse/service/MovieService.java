@@ -37,10 +37,11 @@ public class MovieService {
         movieDto.setStlls(movie.getStlls());
         return movieDto;
     }
-    // 타이틀, 개봉날짜 정보 뽑아내기 List<Map<String, String>>
+    // 타이틀, 감독만 뽑아내기 List<Map<String, String>>
+//    public List<Map<String, String>> getTitleAndDirectorNmList() {}
 
 
-    // 타이틀, 개봉날짜 정보로 이미 있는 자료인지 체크
+    // 타이틀, 감독만 정보로 이미 있는 자료인지 체크
 
 
     // Entity 변환

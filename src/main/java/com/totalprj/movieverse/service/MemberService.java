@@ -32,6 +32,7 @@ public class MemberService {
         memberResDto.setAddr(member.getAddr());
         memberResDto.setImage(member.getImage());
         memberResDto.setIsMembership(member.isMembership());
+        memberResDto.setIsKakao(member.isKakao());
         return memberResDto;
     }
 
