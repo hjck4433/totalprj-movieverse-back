@@ -4,7 +4,6 @@ import com.totalprj.movieverse.entity.Movie;
 import com.totalprj.movieverse.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PythonApi {
+public class PythonApiService {
     private final MovieRepository movieRepository;
 
     // 파이썬 DB 내용 불러오기
