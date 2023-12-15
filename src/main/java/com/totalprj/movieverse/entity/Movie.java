@@ -18,42 +18,42 @@ public class Movie {
     private Long id;
 
     @Column(name="movie_title") // 제목
-    private String movieTitle;
-
-    @Column(name="movie_score") // 평점
-    private String movieScore;
+    private String title;
 
     @Column(name="movie_poster_url") // 포스터 url
-    private String moviePosterUrl;
+    private String posters;
+
+    @Column(name = "movie_titleEng") // 영문 제목
+    private String titleEng;
 
     @Column(name="movie_release") // 개봉일
-    private String movieRelease;
+    private String reprlsDate;
 
     @Column(name="movie_genre") // 장르
-    private String movieGenre;
+    private String genre;
 
     @Column(name="movie_nation") // 국가
-    private String movieNation;
+    private String nation;
 
-    @Column(name="movie_grade") // 등급
-    private String movieGrade;
-
-    @Column(name="movie_audience") // 누적 관객
-    private int movieAudience;
+    @Column(name="movie_rating") // 등급
+    private String rating;
 
     @Column(name="movie_runtime") // 상영 시간
-    private String movieRuntime;
+    private String runtime;
 
-    @Column(name="movie_content") // 주요 정보
-    private String movieContent;
-
-    @Column(name="movie_actor") // 출연 배우
-    private String movieActor;
+    @Column(name="movie_audience") // 누적 관객
+    private int audiAcc;
 
     @Column(name="movie_director") // 감독
-    private String movieDirector;
+    private String directorNm;
+
+    @Column(name="movie_actor") // 출연 배우
+    private String actorNm;
+
+    @Column(name="movie_content") // 주요 정보
+    private String plotText;
 
     @Column(name="movie_still_url") // 스틸컷
-    private String movieStillUrl;
+    private String stlls;
 
 }
