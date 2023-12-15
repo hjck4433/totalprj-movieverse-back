@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class OttWatcha {
     @Id
-    @Column(name="watcha_id") // 북마크 ID
+    @Column(name="watcha_id") // Watcha ID
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 

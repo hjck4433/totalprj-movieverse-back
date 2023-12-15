@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class OttWavve {
     @Id
-    @Column(name="wavve_id") // 북마크 ID
+    @Column(name="wavve_id") // Wavve ID
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 

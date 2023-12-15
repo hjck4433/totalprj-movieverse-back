@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class OttTving {
     @Id
-    @Column(name="tving_id") // 북마크 ID
+    @Column(name="tving_id") // Tving ID
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
