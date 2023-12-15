@@ -20,8 +20,4 @@ public class OttWavve {
     @ManyToOne(fetch = FetchType.LAZY) // 영화 ID 외래키
     @JoinColumn(name = "movie_id")
     private Movie movie;
-
-    @Column(name="movie_rank") // 영화 순위
-    private int movieRank;
-
 }
