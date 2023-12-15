@@ -3,14 +3,15 @@ package com.totalprj.movieverse.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +19,11 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@EnableScheduling
 public class PythonApiService {
 
-//    @Scheduled(cron = "0 1 * * * *")
-    @PostConstruct
+    @Bean
+    @Scheduled(cron = "0 1 * * * *")
     public void startScheduler(){
         log.info("schedule start!");
         List<Map<String, List<Map<String, String>>>> response = fetchDataFromPythonServer();
@@ -44,12 +46,6 @@ public class PythonApiService {
             return null;
         }
     }
-
-
-
-
-
-
 // DB에 저장한 정보 비우기
 
 // 현재상영작 list(Map) 저장
