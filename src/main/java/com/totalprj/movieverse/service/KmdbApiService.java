@@ -27,6 +27,7 @@ import java.util.List;
 @EnableScheduling
 public class KmdbApiService {
 //    private final MovieRepository movieRepository;
+//    private final MovieService movieService;
 //
 //    @Bean
 //    @Scheduled(cron = "0 1 * * * *") // 스케줄러에 등록 후 매분 실행
@@ -34,6 +35,9 @@ public class KmdbApiService {
 //        log.info("schedule start!");
 //        List<MovieDto> response = kmdbApiList();
 //        log.info("python response : {}", response);
+//        List<MovieDto> checkedList = movieService.checkExist(response);
+//        movieService.saveMovieList(checkedList);
+//        log.info("schedule end!");
 //    }
 //
 //    public List<MovieDto> kmdbApiList() {

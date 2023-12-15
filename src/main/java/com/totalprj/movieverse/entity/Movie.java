@@ -50,10 +50,10 @@ public class Movie {
     @Column(name="movie_actor") // 출연 배우
     private String actorNm;
 
-    @Column(name="movie_content") // 주요 정보
+    @Column(name="movie_content" , columnDefinition = "TEXT") // 주요 정보
     private String plotText;
 
-    @Column(name="movie_still_url") // 스틸컷
+    @Column(name="movie_still_url" , columnDefinition = "TEXT") // 스틸컷
     private String stlls;
 
 }
