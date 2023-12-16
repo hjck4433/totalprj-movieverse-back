@@ -62,11 +62,17 @@ public class AuthService {
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
         log.info("authentication : {}", authentication);
 
+
         TokenDto token = tokenProvider.generateTokenDto(authentication);
 
         //refreshToken DB에 저장
         Member member = memberRepository.findByEmail(memberReqDto.getEmail())
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 이메일입니다."));
+
+        // 탈퇴한 회원인지 체크
+        if(member.isWithdraw()){
+            throw new RuntimeException("탈퇴한 회원입니다.");
+        }
 
         // 이미 db에 해당 계정으로 저장된 refreshToken 정보가 있다면 삭제
         log.info("Exists by member: {}", refreshTokenRepository.existsByMember(member));
