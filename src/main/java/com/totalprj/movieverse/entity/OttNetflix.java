@@ -7,13 +7,13 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name="ott_wavve")
+@Table(name="ott_netlfix")
 @Getter
 @Setter
 @NoArgsConstructor
-public class OttWavve {
+public class OttNetflix {
     @Id
-    @Column(name="wavve_id") // Wavve ID
+    @Column(name="netflix_id") // Wavve ID
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 

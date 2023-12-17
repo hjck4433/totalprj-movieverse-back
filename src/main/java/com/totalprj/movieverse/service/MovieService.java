@@ -24,6 +24,7 @@ public class MovieService {
 
     // 타이틀, 감독만 뽑아낸 List<Map<String, String>>
     public List<MovieDto> checkExist(List<MovieDto> movieList) {
+        log.info("movieLsit for check : {}", movieList);
         List<MovieDto> checkList = new ArrayList<>();
 
         for (MovieDto movieDto : movieList) {
