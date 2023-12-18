@@ -7,13 +7,13 @@ import lombok.ToString;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "category")
+@Table(name = "comment")
 @Getter
 @Setter
 @ToString
 public class Comment {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "comment_id")
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
