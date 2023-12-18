@@ -18,24 +18,43 @@ public class Board {
     @GeneratedValue
     @Column(name = "board_id")
     private Long id;
+
+    // 회원
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    // 카테고리 (대분류)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
-    @Column(name = "board_title", nullable = false)
-    private String title;
-    @Column(name = "board_content", nullable = false)
-    private String boardContent;
-    private String image;
+
+    // 소분류
     @Column(name = "gather_type")
     private String gatherType;
+
+    // 댓글
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
+    // 제목
+    @Column(name = "board_title", nullable = false)
+    private String title;
+    
+    // 내용
+    @Column(name = "board_content", nullable = false, columnDefinition = "TEXT")
+    private String boardContent;
+
+    // 이미지
+    private String image;
+
+    // 조회수
     private int count;
+
+    // 등록 날짜
     @Column(name = "registration_date")
     private LocalDateTime regdate;
+
     @PrePersist
     public void prepersist() {regdate = LocalDateTime.now();}
 
