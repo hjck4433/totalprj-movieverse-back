@@ -1,9 +1,7 @@
 package com.totalprj.movieverse.service;
 
-import com.totalprj.movieverse.entity.Boxoffice;
-import com.totalprj.movieverse.entity.OttNetflix;
-import com.totalprj.movieverse.entity.OttTving;
-import com.totalprj.movieverse.entity.OttWatcha;
+import com.totalprj.movieverse.dto.MovieSearchDto;
+import com.totalprj.movieverse.entity.*;
 import com.totalprj.movieverse.repository.BoxofficeRepository;
 import com.totalprj.movieverse.repository.OttNetflixRepository;
 import com.totalprj.movieverse.repository.OttTvingRepository;
@@ -11,6 +9,9 @@ import com.totalprj.movieverse.repository.OttWatchaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -21,6 +22,27 @@ public class OttBoxService {
     private final OttTvingRepository tvingRepository;
     private final BoxofficeRepository boxofficeRepository;
 
+    private final MovieService movieService;
+
+    // BoxOffice 영화 리스트
+    public List<MovieSearchDto> boxOfficeList (){
+        log.info("boxOffice list 생성 시작");
+        // 반환할 빈 배열 생성
+        List<MovieSearchDto> movieList = new ArrayList<>();
+        // 박스오피스 객체를 리스트로 담아줄 빈 배열 생성
+        List<Boxoffice> boxoffices = new ArrayList<>();
+        // 박스오피스 정보 다 불러옴
+        boxoffices = boxofficeRepository.findAll();
+
+        //각 박스오피스의 영화 정보를 movieSearchDto 리스트로 반환
+        for(Boxoffice boxoffice : boxoffices){
+            Movie movie = boxoffice.getMovie(); // 박스오피스의 영화정보
+            MovieSearchDto movieSearchDto = movieService.convertToMovieSearch(movie); // 영화정보를 dto에 담음
+            movieList.add(movieSearchDto); // dto를 리스트에 추가
+            log.info("담긴 영화 : {}",movieSearchDto.getTitle());
+        }
+        return movieList;
+    }
 
 
 
