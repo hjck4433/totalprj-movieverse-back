@@ -6,6 +6,8 @@ import com.totalprj.movieverse.entity.Movie;
 import com.totalprj.movieverse.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -89,7 +91,7 @@ public class MovieService {
     }
 
     // 무비서치 DTO변환
-    private MovieSearchDto convertToMovieSearch(Movie movie) {
+    public MovieSearchDto convertToMovieSearch(Movie movie) {
         MovieSearchDto movieSearchDto = new MovieSearchDto();
         movieSearchDto.setTitle(movie.getTitle());
         movieSearchDto.setPosters(movie.getPosters());
@@ -97,7 +99,6 @@ public class MovieService {
         movieSearchDto.setScore(movie.getScore());
         return movieSearchDto;
     }
-
 
     // DB에서 영화정보 가져오기
     public List<MovieSearchDto> getMovieList() {
@@ -108,12 +109,24 @@ public class MovieService {
             MovieSearchDto searchDto = convertToMovieSearch(movie);
             movieList.add(searchDto);
         }
-
         return movieList;
     }
 
+    // 무비서치 페이지네이션
+    public List<MovieSearchDto> getMovieList(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Movie> movies = movieRepository.findAll(pageable).getContent();
+        List<MovieSearchDto> movieList = new ArrayList<>();
+        for (Movie movie : movies) {
+            MovieSearchDto searchDto = convertToMovieSearch(movie);
+            movieList.add(searchDto);
+        }
+        return movieList;
 
-
-
+    }
+    // 무비서치 페이지 수 조회
+    public int getMoviePage(Pageable pageable) {
+        return movieRepository.findAll(pageable).getTotalPages();
+    }
 
 }
