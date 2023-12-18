@@ -1,9 +1,6 @@
 package com.totalprj.movieverse.controller;
 
-import com.totalprj.movieverse.dto.AccessTokenDto;
-import com.totalprj.movieverse.dto.MemberReqDto;
-import com.totalprj.movieverse.dto.MemberResDto;
-import com.totalprj.movieverse.dto.TokenDto;
+import com.totalprj.movieverse.dto.*;
 import com.totalprj.movieverse.service.AuthService;
 import com.totalprj.movieverse.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -28,17 +25,31 @@ public class AuthController {
         return ResponseEntity.ok(authService.checkUnique(type, dataMap.get("data")));
     }
 
-    // 회원가입
+    //Member 회원가입
     @PostMapping("/join")
     public ResponseEntity<MemberResDto> join(@RequestBody MemberReqDto memberReqDto) {
         log.info("memberReqDto : {}", memberReqDto);
         return ResponseEntity.ok(authService.join(memberReqDto));
     }
 
-    //로그인
+    //Member 로그인
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody MemberReqDto memberReqDto) {
         return ResponseEntity.ok(authService.login(memberReqDto));
+    }
+
+    // Admin 추가 (Swagger 등을 통해서 추가)
+    @PostMapping("/newadmin")
+    public ResponseEntity<Boolean> addAdmin(@RequestBody AdminReqDto adminReqDto){
+        log.info("관리자 추가 : {}", adminReqDto);
+        return ResponseEntity.ok(authService.addAdmin(adminReqDto));
+    }
+
+    // Admin 로그인
+    @PostMapping("/adminlogin")
+    public  ResponseEntity<TokenDto> adminLogin(@RequestBody AdminReqDto adminReqDto){
+        log.info("관리자 로그인 : {}", adminReqDto.getAdminId());
+        return ResponseEntity.ok(authService.adminLogin(adminReqDto));
     }
 
     // 리프레시 토큰으로 새 액세스 토큰 발급
