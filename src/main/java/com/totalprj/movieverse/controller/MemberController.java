@@ -47,7 +47,7 @@ public class MemberController {
 
     // 멤버십 여부 업데이트
     @PostMapping("/membership")
-    public ResponseEntity<Boolean> updateMebership(){
+    public ResponseEntity<Boolean> updateMembership(@RequestBody Map<String, Boolean> data){
         Long id = SecurityUtil.getCurrentMemberId();// 토근에서 id 정보를 가져옴
         log.info("id : {}", id);
         return ResponseEntity.ok(memberService.membershipSave(id));
