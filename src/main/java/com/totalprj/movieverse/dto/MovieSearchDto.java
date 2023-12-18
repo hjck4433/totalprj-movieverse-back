@@ -10,4 +10,6 @@ import lombok.*;
 public class MovieSearchDto {
     private String title;
     private String posters;
+    private String plotText;
+    private String score;
 }

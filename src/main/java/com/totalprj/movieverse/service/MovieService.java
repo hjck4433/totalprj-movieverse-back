@@ -88,5 +88,21 @@ public class MovieService {
         return movieDto;
     }
 
+    // KMDB 영화정보 가져오기
+    public List<MovieDto> getMovieList() {
+        List<Movie> movies = movieRepository.findAll();
+        List<MovieDto> movieList = new ArrayList<>();
+
+        for (Movie movie : movies) {
+            MovieDto movieDto = convertEntityToDto(movie);
+            movieList.add(movieDto);
+        }
+
+        return movieList;
+    }
+
+
+
+
 
 }
