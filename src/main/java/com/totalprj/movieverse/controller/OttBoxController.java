@@ -32,7 +32,7 @@ public class OttBoxController {
     public ResponseEntity<List<MovieSearchDto>> getOttTvingList()
     {
         log.info("ottTiving 리스트 조회 진입");
-        List<MovieSearchDto> movieList = ottBoxService.boxOfficeList();
+        List<MovieSearchDto> movieList = ottBoxService.tivingList();
         log.info("ottTving list : {}", movieList);
         return ResponseEntity.ok(movieList);
     }
@@ -41,7 +41,7 @@ public class OttBoxController {
     public ResponseEntity<List<MovieSearchDto>> getOttNetflixList()
     {
         log.info("ottNetflix 리스트 조회 진입");
-        List<MovieSearchDto> movieList = ottBoxService.boxOfficeList();
+        List<MovieSearchDto> movieList = ottBoxService.netflixList();
         log.info("ottNetflix list : {}", movieList);
         return ResponseEntity.ok(movieList);
     }
@@ -51,7 +51,7 @@ public class OttBoxController {
     public ResponseEntity<List<MovieSearchDto>> getOttWatchaList()
     {
         log.info("ottWatcha 리스트 조회 진입");
-        List<MovieSearchDto> movieList = ottBoxService.boxOfficeList();
+        List<MovieSearchDto> movieList = ottBoxService.WatchaList();
         log.info("ottWatcha list : {}", movieList);
         return ResponseEntity.ok(movieList);
     }

@@ -74,7 +74,7 @@ public class OttBoxService {
     }
 
     // 왓챠 영화 리스트
-    public List<MovieSearchDto> netWatchaList() {
+    public List<MovieSearchDto> WatchaList() {
         log.info("watcha list 생성 시작");
         List<MovieSearchDto> movieList = new ArrayList<>();
         List<OttWatcha> ottWatchas = new ArrayList<>();
