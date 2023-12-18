@@ -16,7 +16,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.lang.reflect.Array;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,15 +37,29 @@ public class PythonApiService {
     @Bean
     @Scheduled(cron = "0 10 * * * *")
     public void startScheduler(){
-        log.info("schedule start!");
-        List<Map<String, List<Map<String, String>>>> response = fetchDataFromPythonServer();
-        log.info("python response : {}", response);
-        List<Map<String, List<Map<String, String>>>> ottList = ottDataList(response);
-        log.info("movieDataList : {}", ottList);
-        processList(ottList);
+        Instant startTime = Instant.now();
+        log.info("PythonApiService schedule start!");
+        // 파이썬에서 정보 받아오기 실패 시에 대한 예외 처리
+        try {
+            List<Map<String, List<Map<String, String>>>> response = fetchDataFromPythonServer();
+            log.info("python response : {}", response);
+
+            if(response != null) {
+                List<Map<String, List<Map<String, String>>>> ottList = ottDataList(response);
+                log.info("movieDataList : {}", ottList);
+                processList(ottList);
+            }else {
+                log.error("fetchDataFromPythonServer 가 실패했습니다.");
+            }
+        }catch (Exception e) {
+            log.error("PythonApiService Schedule 처리 중 오류 : ", e);
+        }
+        Instant endTime = Instant.now();
+        log.info("PythonApiService schedule end! 걸린 시간 : {}", Duration.between(startTime, endTime));
     }
 
     public List<Map<String, List<Map<String, String>>>> fetchDataFromPythonServer() {
+        log.info("파이썬으로 부터 크롤링 결과 + 영화 정보 받으러 가는중 ");
         RestTemplate restTemplate = new RestTemplate();
         String apiUrl = "http://127.0.0.1:5000/api/kmdblist";
         ResponseEntity<List<Map<String, List<Map<String, String>>>>> responseEntity = restTemplate.exchange(
@@ -62,6 +77,7 @@ public class PythonApiService {
     }
     // MovieInfo 만 저장하고 ott리스트 반환
     public List<Map<String, List<Map<String, String>>>> ottDataList(List<Map<String, List<Map<String, String>>>> movieList) {
+        log.info("ottDataList 진입");
         List<Map<String, Object>> res = new ArrayList<>();
 
         // 영화 정보만 뽑아내기
@@ -71,10 +87,6 @@ public class PythonApiService {
 
         // 영화 정보가 있다면 DB 저장
         if (movieInfoMap.isPresent()) {
-//            Map<String, Object> movie_info = new HashMap<>();
-//            movie_info.put("movieInfo", movieInfoMap.get().get("movieInfo"));
-//            res.add(movie_info);
-
             List<MovieDto> infoList = movieDtoList(movieInfoMap.get().get("movieInfo"));
             List<MovieDto> checkedList = movieService.checkExist(infoList);
             movieService.saveMovieList(checkedList);
@@ -90,7 +102,7 @@ public class PythonApiService {
     }
     // Otts 정보 분류
     public List<MovieDto> movieDtoList (List<Map<String,String>> movieInfo) {
-        log.info("movieInfo : {}", movieInfo);
+        log.info("movieDtoList진입 / movieInfo : {}", movieInfo);
         List<MovieDto> movieDtoList = new ArrayList<>();
         for(Map<String,String> movie : movieInfo) {
             MovieDto movieDto = new MovieDto();
@@ -114,6 +126,7 @@ public class PythonApiService {
     }
 
     public void processList (List<Map<String, List<Map<String, String>>>> ottList){
+        log.info("processList 진입");
         List<String> ls = Arrays.asList("box_office", "netflix", "watcha", "tving");
 
         for(String type : ls) {
@@ -133,6 +146,7 @@ public class PythonApiService {
     }
 
     public void saveOtt(String type, List<Map<String, String>> ottData){
+        log.info("saveOtt 진입");
         switch(type) {
             case "box_office" :
                 // box_office
@@ -153,6 +167,7 @@ public class PythonApiService {
         }
     }
     private <T> void deleteAndSaveEntity(JpaRepository<T, ?>repository, Class<T> entityType, List<Map<String, String>> ottData){
+        log.info("deleteAndSaveEntity 진입");
         repository.deleteAll();
         for(Map<String, String> data : ottData) {
             T entity;
@@ -160,7 +175,7 @@ public class PythonApiService {
             try {
                 entity = entityType.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                throw new RuntimeException("Failed to create an instance of the entity.", e);
+                throw new RuntimeException("엔티티 객체 생성 실패.", e);
             }
 
             // 제목, 감독 정보를 기준으로 영화 검색
@@ -172,12 +187,16 @@ public class PythonApiService {
 
             // 해당하는 entity에 set
             if (entity instanceof Boxoffice) {
+                log.info("Boxoffice 저장 중");
                 ((Boxoffice) entity).setMovie(movie);
             }else if(entity instanceof OttNetflix) {
+                log.info("Netflix 저장 중");
                 ((OttNetflix) entity).setMovie(movie);
             }else if(entity instanceof OttWatcha) {
+                log.info("Watcha 저장 중");
                 ((OttWatcha) entity).setMovie(movie);
             }else if(entity instanceof OttTving) {
+                log.info("Tving 저장 중");
                 ((OttTving) entity).setMovie(movie);
             }
 
@@ -187,35 +206,6 @@ public class PythonApiService {
         }
     }
 
-
-//// DB에 저장한 정보 비우기
-//
-//// 현재상영작 list(Map) 저장
-//
-//// ott(Netflix) list(Map) 저장
-//
-//// 현재상영작(watcha) list(Map) 저장
-//
-//// 현재상영작(tving) list(Map) 저장
-
-
-//    // DTO 변환
-//    private MovieDto convertEntityToDto(Movie movie) {
-//        MovieDto movieDto = new MovieDto();
-//        movieDto.setTitle(movie.getTitle());
-//        movieDto.setPosters(movie.getPosters());
-//        movieDto.setTitleEng(movie.getTitleEng());
-//        movieDto.setReprlsDate(movie.getReprlsDate());
-//        movieDto.setGenre(movie.getGenre());
-//        movieDto.setNation(movie.getNation());
-//        movieDto.setRating(movie.getRating());
-//        movieDto.setRuntime(movie.getRuntime());
-//        movieDto.setAudiAcc(movie.getAudiAcc());
-//        movieDto.setDirectorNm(movie.getDirectorNm());
-//        movieDto.setActorNm(movie.getActorNm());
-//        movieDto.setPlotText(movie.getPlotText());
-//        return movieDto;
-//    }
 
 }
 
