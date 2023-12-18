@@ -45,7 +45,17 @@ public class MemberController {
         return ResponseEntity.ok(memberService.isPassword(password, id));
     }
 
-    //회원 탈퇴
+    // 멤버십 여부 업데이트
+    @PostMapping("/membership")
+    public ResponseEntity<Boolean> updateMebership(){
+        Long id = SecurityUtil.getCurrentMemberId();// 토근에서 id 정보를 가져옴
+        log.info("id : {}", id);
+        return ResponseEntity.ok(memberService.membershipSave(id));
+    }
+
+
+
+    // 회원 탈퇴
     @PostMapping("/withdraw")
     public ResponseEntity<Boolean> withdrawMember(){
         Long id = SecurityUtil.getCurrentMemberId();
