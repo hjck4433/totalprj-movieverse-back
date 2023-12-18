@@ -69,6 +69,20 @@ public class MemberService {
             memberRepository.save(member);
             return true;
         }catch (Exception e){
+            log.info("회원탈퇴 처리 중 오류 발생");
+            return false;
+        }
+    }
+
+    // 멤버십 여부 업데이트
+    public boolean membershipSave(Long id) {
+        try{
+            Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
+            member.setMembership(true);
+            memberRepository.save(member);
+            return true;
+        }catch (Exception e){
+            log.info("멤버십 가입 처리 중 오류 발생");
             return false;
         }
     }
