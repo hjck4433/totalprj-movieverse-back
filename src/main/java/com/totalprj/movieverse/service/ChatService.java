@@ -29,7 +29,12 @@ public class ChatService {
         chatRooms = new LinkedHashMap<>();
     }
     public List<ChatRoomResDto> findAllRoom() {
-        return new ArrayList<>(chatRooms.values());
+        List<ChatRoomResDto> roomList = new ArrayList<>(chatRooms.values());
+        if(roomList != null) {
+            return roomList;
+        }else {
+            return null;
+        }
     }
     public ChatRoomResDto findRoomById(String roomId){
         return chatRooms.get(roomId);

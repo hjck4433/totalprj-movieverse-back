@@ -29,8 +29,9 @@ public class ChatController {
 
     // 방 리스트 반환
     @GetMapping("/list")
-    public List<ChatRoomResDto> findAllRoom(){
-        return chatService.findAllRoom();
+    public ResponseEntity<List<ChatRoomResDto>> findAllRoom(){
+        log.info("chatList : {}", chatService.findAllRoom());
+        return ResponseEntity.ok(chatService.findAllRoom());
     }
 
     // 특정 방 조회
