@@ -21,7 +21,5 @@ public class Boxoffice {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
-    @Column(name="movie_rank") // 영화 순위
-    private int movieRank;
 
 }

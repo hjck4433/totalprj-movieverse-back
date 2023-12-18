@@ -18,7 +18,8 @@ public class Faq {
     @Column(name= "faq_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long faqId;
+    @Column(name ="faq_question")
     private String faqQuestion;
+    @Column(name = "faq_answer", columnDefinition = "TEXT")
     private String faqAnswer;
-
 }

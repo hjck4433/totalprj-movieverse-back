@@ -16,7 +16,7 @@ public class MovieDto {
     private String nation;
     private String rating;
     private String runtime;
-    private String audiAcc;
+    private String Score;
     private String directorNm;
     private String actorNm;
     private String plotText;

@@ -100,7 +100,8 @@ public class PythonApiService {
         log.info("ottMapList : {}", ottMapList);
         return ottMapList;
     }
-    // Otts 정보 분류
+
+    // movieInfo MovieDto로 convert 후 리스트화
     public List<MovieDto> movieDtoList (List<Map<String,String>> movieInfo) {
         log.info("movieDtoList진입 / movieInfo : {}", movieInfo);
         List<MovieDto> movieDtoList = new ArrayList<>();
@@ -115,7 +116,7 @@ public class PythonApiService {
             movieDto.setNation(movie.get("nation"));
             movieDto.setRating(movie.get("rating"));
             movieDto.setRuntime(movie.get("runtime"));
-            movieDto.setAudiAcc(movie.get("audiAcc"));
+            movieDto.setScore(movie.get("score"));
             movieDto.setDirectorNm(movie.get("directorNm"));
             movieDto.setActorNm(movie.get("actorNm"));
             movieDto.setPlotText(movie.get("plotText"));
@@ -125,6 +126,7 @@ public class PythonApiService {
         return movieDtoList;
     }
 
+    // Ott, boxoffice 구분
     public void processList (List<Map<String, List<Map<String, String>>>> ottList){
         log.info("processList 진입");
         List<String> ls = Arrays.asList("box_office", "netflix", "watcha", "tving");
@@ -145,6 +147,7 @@ public class PythonApiService {
         }
     }
 
+    // ott 별 method 호출
     public void saveOtt(String type, List<Map<String, String>> ottData){
         log.info("saveOtt 진입");
         switch(type) {
@@ -166,8 +169,11 @@ public class PythonApiService {
                 log.warn("ottData가 없습니다");
         }
     }
+
+    // 해당 테이블 정보 지우고 새 정보 저장
     private <T> void deleteAndSaveEntity(JpaRepository<T, ?>repository, Class<T> entityType, List<Map<String, String>> ottData){
         log.info("deleteAndSaveEntity 진입");
+        // 테이블 비우기
         repository.deleteAll();
         for(Map<String, String> data : ottData) {
             T entity;

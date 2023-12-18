@@ -59,7 +59,7 @@ public class MovieService {
             movie.setNation(movieDto.getNation());
             movie.setRating(movieDto.getRating());
             movie.setRuntime(movieDto.getRuntime());
-            movie.setAudiAcc(movieDto.getAudiAcc());
+            movie.setScore(movieDto.getScore());
             movie.setDirectorNm(movieDto.getDirectorNm());
             movie.setActorNm(movieDto.getActorNm());
             movie.setPlotText(movieDto.getPlotText());
@@ -80,7 +80,7 @@ public class MovieService {
         movieDto.setNation(movie.getNation());
         movieDto.setRating(movie.getRating());
         movieDto.setRuntime(movie.getRuntime());
-        movieDto.setAudiAcc(movie.getAudiAcc());
+        movieDto.setScore(movie.getScore());
         movieDto.setDirectorNm(movie.getDirectorNm());
         movieDto.setActorNm(movie.getActorNm());
         movieDto.setPlotText(movie.getPlotText());

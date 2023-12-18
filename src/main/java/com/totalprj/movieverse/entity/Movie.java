@@ -41,8 +41,10 @@ public class Movie {
     @Column(name="movie_runtime") // 상영 시간
     private String runtime;
 
-    @Column(name="movie_audience") // 누적 관객
-    private String audiAcc;
+//    @Column(name="movie_audience") // 누적 관객
+//    private String audiAcc;
+    @Column(name = "movie_score") // 평점
+    private String score;
 
     @Column(name="movie_director") // 감독
     private String directorNm;
