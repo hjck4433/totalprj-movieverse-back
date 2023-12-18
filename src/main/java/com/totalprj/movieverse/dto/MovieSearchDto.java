@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class MovieSearchDto {
+    private Long id;
     private String title;
     private String posters;
     private String plotText;

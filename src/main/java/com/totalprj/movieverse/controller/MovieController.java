@@ -1,6 +1,7 @@
 package com.totalprj.movieverse.controller;
 
 import com.totalprj.movieverse.dto.MovieDto;
+import com.totalprj.movieverse.dto.MovieSearchDto;
 import com.totalprj.movieverse.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +19,11 @@ import java.util.List;
 public class MovieController {
     private final MovieService movieService;
 
-    // Kmdb Api 영화 조회
-    @GetMapping("/apilist")
-    public ResponseEntity<List<MovieDto>> getMovieList() {
+    // 전체 영화 조회
+    @GetMapping("/movielist")
+    public ResponseEntity<List<MovieSearchDto>> getMovieList() {
         log.info("전체 영화정보 조회 진입");
-        List<MovieDto> movieList = movieService.getMovieList();
+        List<MovieSearchDto> movieList = movieService.getMovieList();
         return ResponseEntity.ok(movieList);
     }
 

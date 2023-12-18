@@ -1,6 +1,7 @@
 package com.totalprj.movieverse.service;
 
 import com.totalprj.movieverse.dto.MovieDto;
+import com.totalprj.movieverse.dto.MovieSearchDto;
 import com.totalprj.movieverse.entity.Movie;
 import com.totalprj.movieverse.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +29,13 @@ public class MovieService {
         List<MovieDto> checkList = new ArrayList<>();
 
         for (MovieDto movieDto : movieList) {
-                String title = movieDto.getTitle();
-                String director = movieDto.getDirectorNm();
-                String poster = movieDto.getPosters();
-                String plot = movieDto.getPlotText();
-                log.info("title : {} , director : {}", title, director);
-                boolean isExist = movieRepository.existsByTitleAndDirectorNm(title, director);
-            if(!isExist && !Objects.equals(poster, "") && !Objects.equals(plot, "")) { // 영화 정보가 없으면 리스트에 추가
+            String title = movieDto.getTitle();
+            String director = movieDto.getDirectorNm();
+            String poster = movieDto.getPosters();
+            String plot = movieDto.getPlotText();
+            log.info("title : {} , director : {}", title, director);
+            boolean isExist = movieRepository.existsByTitleAndDirectorNm(title, director);
+            if (!isExist && !Objects.equals(poster, "") && !Objects.equals(plot, "")) { // 영화 정보가 없으면 리스트에 추가
 
                 checkList.add(movieDto);
 
@@ -46,10 +47,9 @@ public class MovieService {
     }
 
 
-
     // 영화 정보 저장
-    public void saveMovieList(List<MovieDto> checkedList){
-        for(MovieDto movieDto : checkedList) {
+    public void saveMovieList(List<MovieDto> checkedList) {
+        for (MovieDto movieDto : checkedList) {
             Movie movie = new Movie();
             movie.setTitle(movieDto.getTitle());
             movie.setPosters(movieDto.getPosters());
@@ -69,7 +69,7 @@ public class MovieService {
     }
 
 
-    // DTO 변환
+    // 전체 DTO 변환
     private MovieDto convertEntityToDto(Movie movie) {
         MovieDto movieDto = new MovieDto();
         movieDto.setTitle(movie.getTitle());
@@ -88,14 +88,25 @@ public class MovieService {
         return movieDto;
     }
 
-    // KMDB 영화정보 가져오기
-    public List<MovieDto> getMovieList() {
+    // 무비서치 DTO변환
+    private MovieSearchDto convertToMovieSearch(Movie movie) {
+        MovieSearchDto movieSearchDto = new MovieSearchDto();
+        movieSearchDto.setTitle(movie.getTitle());
+        movieSearchDto.setPosters(movie.getPosters());
+        movieSearchDto.setPlotText(movie.getPlotText());
+        movieSearchDto.setScore(movie.getScore());
+        return movieSearchDto;
+    }
+
+
+    // DB에서 영화정보 가져오기
+    public List<MovieSearchDto> getMovieList() {
         List<Movie> movies = movieRepository.findAll();
-        List<MovieDto> movieList = new ArrayList<>();
+        List<MovieSearchDto> movieList = new ArrayList<>();
 
         for (Movie movie : movies) {
-            MovieDto movieDto = convertEntityToDto(movie);
-            movieList.add(movieDto);
+            MovieSearchDto searchDto = convertToMovieSearch(movie);
+            movieList.add(searchDto);
         }
 
         return movieList;
