@@ -28,19 +28,19 @@ public class MovieController {
         return ResponseEntity.ok(movieList);
     }
 
-    // 무비서치 페이지네이션
+    // 무비리스트 페이지네이션
     @GetMapping("/movielist/page")
     public ResponseEntity<List<MovieSearchDto>> getMovieList(@RequestParam(defaultValue = "0") int page,
-                                                             @RequestParam(defaultValue = "4") int size) {
+                                                             @RequestParam(defaultValue = "8") int size) {
         List<MovieSearchDto> movieList = movieService.getMovieList(page, size);
         log.info("movieList : {}", movieList);
         return ResponseEntity.ok(movieList);
     }
 
-    // 무비서치 페이지 수 조회
+    // 무비리스트 페이지 수 조회
     @GetMapping("/movielist/count")
     public ResponseEntity<Integer> movieCount(@RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "4") int size) {
+                                                @RequestParam(defaultValue = "8") int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         int pageCnt = movieService.getMoviePage(pageRequest);
         return ResponseEntity.ok(pageCnt);

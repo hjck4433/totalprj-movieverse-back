@@ -112,7 +112,7 @@ public class MovieService {
         return movieList;
     }
 
-    // 무비서치 페이지네이션
+    // 무비리스트 페이지네이션
     public List<MovieSearchDto> getMovieList(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         List<Movie> movies = movieRepository.findAll(pageable).getContent();
@@ -124,9 +124,8 @@ public class MovieService {
         return movieList;
 
     }
-    // 무비서치 페이지 수 조회
+    // 무비리스트 페이지 수 조회
     public int getMoviePage(Pageable pageable) {
         return movieRepository.findAll(pageable).getTotalPages();
     }
-
 }
