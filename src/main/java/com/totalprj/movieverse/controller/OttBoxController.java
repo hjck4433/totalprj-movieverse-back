@@ -27,4 +27,33 @@ public class OttBoxController {
         return ResponseEntity.ok(movieList);
     }
 
+    // 티빙 영화 리스트
+    @GetMapping("/otttiving")
+    public ResponseEntity<List<MovieSearchDto>> getOttTvingList()
+    {
+        log.info("ottTiving 리스트 조회 진입");
+        List<MovieSearchDto> movieList = ottBoxService.boxOfficeList();
+        log.info("ottTving list : {}", movieList);
+        return ResponseEntity.ok(movieList);
+    }
+    // 넷플릭스 영화 리스트
+    @GetMapping("/ottnetflix")
+    public ResponseEntity<List<MovieSearchDto>> getOttNetflixList()
+    {
+        log.info("ottNetflix 리스트 조회 진입");
+        List<MovieSearchDto> movieList = ottBoxService.boxOfficeList();
+        log.info("ottNetflix list : {}", movieList);
+        return ResponseEntity.ok(movieList);
+    }
+
+    // 왓챠 영화 리스트
+    @GetMapping("/ottwatcha")
+    public ResponseEntity<List<MovieSearchDto>> getOttWatchaList()
+    {
+        log.info("ottWatcha 리스트 조회 진입");
+        List<MovieSearchDto> movieList = ottBoxService.boxOfficeList();
+        log.info("ottWatcha list : {}", movieList);
+        return ResponseEntity.ok(movieList);
+    }
+
 }

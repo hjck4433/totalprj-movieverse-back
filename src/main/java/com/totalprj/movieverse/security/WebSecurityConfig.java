@@ -41,7 +41,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/auth/**", "/ws/**", "/movies/**","/test/**","/email/**","/kakao/**","/ottbox/**").permitAll()
+                .antMatchers("/auth/**", "/ws/**", "/movies/**","/test/**","/email/**","/kakao/**","/ottbox/**","/otttiving/**","/ottnetflix/**","/ottwatcha/**").permitAll()
                 .antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**", "/sign-api/exception").permitAll()
                 .anyRequest().authenticated()
                 .and()

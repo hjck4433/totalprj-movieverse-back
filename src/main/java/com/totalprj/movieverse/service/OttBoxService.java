@@ -17,15 +17,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OttBoxService {
+    private final OttTvingRepository tvingRepository;
     private final OttNetflixRepository netflixRepository;
     private final OttWatchaRepository watchaRepository;
-    private final OttTvingRepository tvingRepository;
     private final BoxofficeRepository boxofficeRepository;
 
     private final MovieService movieService;
 
     // BoxOffice 영화 리스트
-    public List<MovieSearchDto> boxOfficeList (){
+    public List<MovieSearchDto> boxOfficeList() {
         log.info("boxOffice list 생성 시작");
         // 반환할 빈 배열 생성
         List<MovieSearchDto> movieList = new ArrayList<>();
@@ -35,18 +35,58 @@ public class OttBoxService {
         boxoffices = boxofficeRepository.findAll();
 
         //각 박스오피스의 영화 정보를 movieSearchDto 리스트로 반환
-        for(Boxoffice boxoffice : boxoffices){
+        for (Boxoffice boxoffice : boxoffices) {
             Movie movie = boxoffice.getMovie(); // 박스오피스의 영화정보
             MovieSearchDto movieSearchDto = movieService.convertToMovieSearch(movie); // 영화정보를 dto에 담음
             movieList.add(movieSearchDto); // dto를 리스트에 추가
-            log.info("담긴 영화 : {}",movieSearchDto.getTitle());
+            log.info("담긴 영화 : {}", movieSearchDto.getTitle());
         }
         return movieList;
     }
 
+    // 티빙 영화 리스트
+    public List<MovieSearchDto> tivingList() {
+        log.info("tiving list 생성 시작");
+        List<MovieSearchDto> movieList = new ArrayList<>();
+        List<OttTving> ottTvings = new ArrayList<>();
+        ottTvings = tvingRepository.findAll();
 
+        for (OttTving ottTving : ottTvings) {
+            Movie movie = ottTving.getMovie();
+            MovieSearchDto movieSearchDto = movieService.convertToMovieSearch(movie);
+            movieList.add(movieSearchDto);
+            log.info("담긴 영화 : {}", movieSearchDto.getTitle());
+        }return movieList;
+    }
+    // 넷플릭스 영화 리스트
+    public List<MovieSearchDto> netflixList() {
+        log.info("nexflix list 생성 시작");
+        List<MovieSearchDto> movieList = new ArrayList<>();
+        List<OttNetflix> ottNetflixes = new ArrayList<>();
+        ottNetflixes = netflixRepository.findAll();
 
+        for (OttNetflix ottNetflix : ottNetflixes) {
+            Movie movie = ottNetflix.getMovie();
+            MovieSearchDto movieSearchDto = movieService.convertToMovieSearch(movie);
+            movieList.add(movieSearchDto);
+            log.info("담긴 영화 : {}", movieSearchDto.getTitle());
+        }return movieList;
+    }
 
+    // 왓챠 영화 리스트
+    public List<MovieSearchDto> netWatchaList() {
+        log.info("watcha list 생성 시작");
+        List<MovieSearchDto> movieList = new ArrayList<>();
+        List<OttWatcha> ottWatchas = new ArrayList<>();
+        ottWatchas = watchaRepository.findAll();
+
+        for (OttWatcha ottWatcha : ottWatchas) {
+            Movie movie = ottWatcha.getMovie();
+            MovieSearchDto movieSearchDto = movieService.convertToMovieSearch(movie);
+            movieList.add(movieSearchDto);
+            log.info("담긴 영화 : {}", movieSearchDto.getTitle());
+        }return movieList;
+    }
 
 
 }
