@@ -16,17 +16,17 @@ public class FaqService {
 
 
     // faq 추가 기능 만들기
-    public FaqDto createFaq(String faqAdd) {
+    public boolean createFaq(FaqDto faqDto) {
         // Faq 객체 생성
         Faq faq = new Faq();
-        faq.setFaqAnswer(faqAdd);
-        faq.setFaqQuestion(faqAdd);
+        faq.setFaqAnswer(faqDto.getFaqAnswer());
+        faq.setFaqQuestion(faqDto.getFaqQuestion());
         // Faq 저장
         Faq saved = faqRepository.save(faq);
         // 저장된 Faq를 Dto로 변환
-        FaqDto faqDto = convertEntityToDto(saved);
+
         log.info("savedFaq : {}", faqDto);
-        return faqDto;
+        return true;
     }
 
     //엔티티를 Dto로 변환
