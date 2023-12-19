@@ -1,5 +1,6 @@
 package com.totalprj.movieverse.service;
 
+import com.totalprj.movieverse.entity.Bookmark;
 import com.totalprj.movieverse.entity.Member;
 import com.totalprj.movieverse.entity.Movie;
 import com.totalprj.movieverse.repository.BookmarkRepository;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BookMarkService {
+public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final MovieRepository movieRepository;
     private final MemberRepository memberRepository;
@@ -26,5 +27,17 @@ public class BookMarkService {
         boolean isBookMark = bookmarkRepository.existsByMemberAndMovie(member, movie);
         log.info("{} bookMarked {} ",movie.getTitle(), isBookMark );
         return isBookMark;
+    }
+    public boolean saveBookMark(Long memberId, Long movieId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new RuntimeException("해당 회원이 존재 하지 않습니다."));
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(() -> new RuntimeException("영화가 존재 하지 않습니다."));
+
+        Bookmark bookmark = new Bookmark();
+        bookmark.setMember(member);
+        bookmark.setMovie(movie);
+        Bookmark saved = bookmarkRepository.save(bookmark);
+        return true;
     }
 }
