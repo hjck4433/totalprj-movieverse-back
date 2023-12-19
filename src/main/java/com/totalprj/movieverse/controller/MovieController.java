@@ -27,10 +27,10 @@ public class MovieController {
         return ResponseEntity.ok(movieList);
     }
 
-    @GetMapping("/movielist/${movieId}")
     // 무비인포 정보 조회
+    @GetMapping("/movielist/{id}")
     public ResponseEntity<MovieResDto> getMovieDetail(@PathVariable Long id) {
-        log.info("무비인포 영화정보 조회");
+        log.info("무비인포 영화정보 조회 id : {}", id);
         MovieResDto movieDetail = movieService.getMovieDetail(id);
         return ResponseEntity.ok(movieDetail);
     }
