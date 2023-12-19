@@ -27,6 +27,6 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> createCategory(@RequestParam String categoryName){
         CategoryDto categoryDto = categoryService.createCategory(categoryName); // 새 카테고리 생성
         log.info("카테고리 저장하기: {}", categoryDto);
-        return new ResponseEntity<>(categoryDto, HttpStatus.CREATED); // 저장된 카테고리 DTO를 반환
+        return ResponseEntity.ok(categoryDto); // 저장된 카테고리 DTO를 반환
     }
 }
