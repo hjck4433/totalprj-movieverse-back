@@ -9,12 +9,9 @@ import java.time.LocalDateTime;
 @Setter
 public class BoardDto {
     private Long boardId;
-    private Long categoryId;
-    private String email;
+    private String categoryName;
     private String title;
     private String content;
     private String image;
     private String gatherType;
-    private int count;
-    private LocalDateTime regdate;
 }
