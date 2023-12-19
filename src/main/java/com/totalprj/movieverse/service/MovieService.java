@@ -138,6 +138,7 @@ public class MovieService {
         movieResDto.setTitleEng(movie.getTitleEng());
         movieResDto.setReprlsDate(movie.getReprlsDate());
         movieResDto.setGenre(movie.getGenre());
+        movieResDto.setNation(movie.getNation());
         movieResDto.setRating(movie.getRating());
         movieResDto.setRuntime(movie.getRuntime());
         movieResDto.setScore(movie.getScore());
