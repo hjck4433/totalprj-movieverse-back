@@ -5,6 +5,7 @@ import com.totalprj.movieverse.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,13 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@EnableScheduling
 public class KmdbApiService {
     private final MovieRepository movieRepository;
     private final MovieService movieService;
 
-    @Bean
-    @Scheduled(cron = "0 5 * * * *") // 스케줄러에 등록 후 매분 실행
+
+//    @Scheduled(cron = "0 3 * * * *") // 스케줄러에 등록 후 매분 실행
+    @Scheduled(initialDelay = 80 * 1000, fixedDelay = Long.MAX_VALUE)
     public void movieScheduler() {
         Instant startTime = Instant.now();
         log.info("KmdbApiService schedule start!");

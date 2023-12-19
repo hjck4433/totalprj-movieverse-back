@@ -7,6 +7,7 @@ import com.totalprj.movieverse.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpMethod;
@@ -25,7 +26,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@EnableScheduling
 public class PythonApiService {
     private final MovieService movieService;
     private final MovieRepository movieRepository;
@@ -34,8 +34,9 @@ public class PythonApiService {
     private final OttTvingRepository tvingRepository;
     private final BoxofficeRepository boxofficeRepository;
 
-    @Bean
-    @Scheduled(cron = "0 10 * * * *")
+
+//    @Scheduled(cron = "0 1 * * * *")
+    @Scheduled(initialDelay = 0, fixedDelay = Long.MAX_VALUE)
     public void startScheduler(){
         Instant startTime = Instant.now();
         log.info("PythonApiService schedule start!");

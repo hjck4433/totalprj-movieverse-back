@@ -5,10 +5,7 @@ import com.totalprj.movieverse.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -22,6 +19,20 @@ public class BookMarkController {
         log.info("북마크 여부 확인 진입");
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(bookmarkService.isBookMarked(memberId, movieId));
+    }
+
+    @PostMapping("/save")
+    public ResponseEntity<Boolean> saveBookmark(@RequestParam Long movieId) {
+        log.info("북마크 저장 진입");
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(bookmarkService.saveBookMark(memberId, movieId));
+    }
+
+    @DeleteMapping("/remove/{movieId}")
+    ResponseEntity<Boolean> removeBookmark(@PathVariable Long movieId) {
+        log.info("북마크 해제 진입");
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(bookmarkService.removeBookMark(memberId, movieId));
     }
 
 }
