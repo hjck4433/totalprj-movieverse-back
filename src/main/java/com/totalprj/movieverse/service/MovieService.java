@@ -1,6 +1,7 @@
 package com.totalprj.movieverse.service;
 
 import com.totalprj.movieverse.dto.MovieDto;
+import com.totalprj.movieverse.dto.MovieResDto;
 import com.totalprj.movieverse.dto.MovieSearchDto;
 import com.totalprj.movieverse.entity.Movie;
 import com.totalprj.movieverse.repository.MovieRepository;
@@ -88,6 +89,37 @@ public class MovieService {
         movieDto.setPlotText(movie.getPlotText());
         movieDto.setStlls(movie.getStlls());
         return movieDto;
+    }
+
+    // 무비인포 DTO변환
+    public MovieResDto convertToMovieInfo(Movie movie) {
+        MovieResDto movieResDto = new MovieResDto();
+        movieResDto.setId(movie.getId());
+        movieResDto.setTitle(movie.getTitle());
+        movieResDto.setPosters(movie.getPosters());
+        movieResDto.setTitleEng(movie.getTitleEng());
+        movieResDto.setReprlsDate(movie.getReprlsDate());
+        movieResDto.setGenre(movie.getGenre());
+        movieResDto.setRating(movie.getRating());
+        movieResDto.setRuntime(movie.getRuntime());
+        movieResDto.setScore(movie.getScore());
+        movieResDto.setDirectorNm(movie.getDirectorNm());
+        movieResDto.setActorNm(movie.getActorNm());
+        movieResDto.setPlotText(movie.getPlotText());
+        movieResDto.setStlls(movie.getStlls());
+        return movieResDto;
+    }
+
+    // DB에서 영화 상세정보 가져오기
+    public List<MovieResDto> getMovieDetail() {
+        List<Movie> movies = movieRepository.findAll();
+        List<MovieResDto> movieDetail = new ArrayList<>();
+
+        for (Movie movie : movies) {
+            MovieResDto movieResDto = convertToMovieInfo(movie);
+            movieDetail.add(movieResDto);
+        }
+        return movieDetail;
     }
 
     // 무비서치 DTO변환

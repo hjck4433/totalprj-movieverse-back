@@ -1,6 +1,7 @@
 package com.totalprj.movieverse.controller;
 
 import com.totalprj.movieverse.dto.MovieDto;
+import com.totalprj.movieverse.dto.MovieResDto;
 import com.totalprj.movieverse.dto.MovieSearchDto;
 import com.totalprj.movieverse.service.MovieService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,14 @@ public class MovieController {
         log.info("전체 영화정보 조회 진입");
         List<MovieSearchDto> movieList = movieService.getMovieList();
         return ResponseEntity.ok(movieList);
+    }
+
+    @GetMapping("/movielist/${movieId}")
+    // 무비인포 정보 조회
+    public ResponseEntity<List<MovieResDto>> getMovieDetail() {
+        log.info("무비인포 영화정보 조회");
+        List<MovieResDto> movieDetail = movieService.getMovieDetail();
+        return ResponseEntity.ok(movieDetail);
     }
 
     // 무비리스트 페이지네이션
