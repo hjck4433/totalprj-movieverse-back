@@ -8,10 +8,12 @@ import com.totalprj.movieverse.repository.KakaoRepository;
 import com.totalprj.movieverse.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.asm.Advice;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @Service
 @Slf4j
@@ -53,6 +55,7 @@ public class MemberService {
             member.setPhone(memberReqDto.getPhone());
             member.setAddr(memberReqDto.getAddr());
             member.setImage(memberReqDto.getImage());
+            member.setRegDate(LocalDateTime.now());
             memberRepository.save(member);
             return true;
         }catch(Exception e){
@@ -77,12 +80,27 @@ public class MemberService {
     // 멤버십 여부 업데이트
     public boolean membershipSave(Long id) {
         try{
-            Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
+            Member member = memberRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
             member.setMembership(true);
             memberRepository.save(member);
             return true;
         }catch (Exception e){
-            log.info("멤버십 가입 처리 중 오류 발생");
+            log.error("멤버십 가입 처리 중 오류 발생");
+            return false;
+        }
+    }
+
+    // 멤버십 여부 가져오기
+    public boolean isMembership(Long id) {
+        try {
+            Member member = memberRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
+            boolean isKiki = member.isMembership();
+            log.info("isKiKi ? : {}", isKiki);
+            return isKiki;
+        }catch (Exception e){
+            log.error("멥버십 정보 가져 오는 중 오류 발생");
             return false;
         }
     }
