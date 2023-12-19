@@ -72,66 +72,21 @@ public class MovieService {
     }
 
 
-    // 전체 DTO 변환
-    private MovieDto convertEntityToDto(Movie movie) {
-        MovieDto movieDto = new MovieDto();
-        movieDto.setTitle(movie.getTitle());
-        movieDto.setPosters(movie.getPosters());
-        movieDto.setTitleEng(movie.getTitleEng());
-        movieDto.setReprlsDate(movie.getReprlsDate());
-        movieDto.setGenre(movie.getGenre());
-        movieDto.setNation(movie.getNation());
-        movieDto.setRating(movie.getRating());
-        movieDto.setRuntime(movie.getRuntime());
-        movieDto.setScore(movie.getScore());
-        movieDto.setDirectorNm(movie.getDirectorNm());
-        movieDto.setActorNm(movie.getActorNm());
-        movieDto.setPlotText(movie.getPlotText());
-        movieDto.setStlls(movie.getStlls());
-        return movieDto;
-    }
 
-    // 무비인포 DTO변환
-    public MovieResDto convertToMovieInfo(Movie movie) {
-        MovieResDto movieResDto = new MovieResDto();
-        movieResDto.setId(movie.getId());
-        movieResDto.setTitle(movie.getTitle());
-        movieResDto.setPosters(movie.getPosters());
-        movieResDto.setTitleEng(movie.getTitleEng());
-        movieResDto.setReprlsDate(movie.getReprlsDate());
-        movieResDto.setGenre(movie.getGenre());
-        movieResDto.setRating(movie.getRating());
-        movieResDto.setRuntime(movie.getRuntime());
-        movieResDto.setScore(movie.getScore());
-        movieResDto.setDirectorNm(movie.getDirectorNm());
-        movieResDto.setActorNm(movie.getActorNm());
-        movieResDto.setPlotText(movie.getPlotText());
-        movieResDto.setStlls(movie.getStlls());
-        return movieResDto;
-    }
 
     // DB에서 영화 상세정보 가져오기
-    public List<MovieResDto> getMovieDetail() {
-        List<Movie> movies = movieRepository.findAll();
-        List<MovieResDto> movieDetail = new ArrayList<>();
+    public MovieResDto getMovieDetail(Long id) {
+        MovieResDto movieDetail = new MovieResDto();
+        Movie movie = movieRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당하는 영화가 없습니다."));
 
-        for (Movie movie : movies) {
-            MovieResDto movieResDto = convertToMovieInfo(movie);
-            movieDetail.add(movieResDto);
-        }
+        movieDetail = convertToMovieInfo(movie);
+        log.info("{}영화 상세정보 추출 : ", movieDetail.getTitle());
+
         return movieDetail;
     }
 
-    // 무비서치 DTO변환
-    public MovieSearchDto convertToMovieSearch(Movie movie) {
-        MovieSearchDto movieSearchDto = new MovieSearchDto();
-        movieSearchDto.setId(movie.getId());
-        movieSearchDto.setTitle(movie.getTitle());
-        movieSearchDto.setPosters(movie.getPosters());
-        movieSearchDto.setPlotText(movie.getPlotText());
-        movieSearchDto.setScore(movie.getScore());
-        return movieSearchDto;
-    }
+
 
     // DB에서 영화정보 가져오기
     public List<MovieSearchDto> getMovieList() {
@@ -160,5 +115,36 @@ public class MovieService {
     // 무비리스트 페이지 수 조회
     public int getMoviePage(Pageable pageable) {
         return movieRepository.findAll(pageable).getTotalPages();
+    }
+
+
+    // 무비서치 DTO변환
+    public MovieSearchDto convertToMovieSearch(Movie movie) {
+        MovieSearchDto movieSearchDto = new MovieSearchDto();
+        movieSearchDto.setId(movie.getId());
+        movieSearchDto.setTitle(movie.getTitle());
+        movieSearchDto.setPosters(movie.getPosters());
+        movieSearchDto.setPlotText(movie.getPlotText());
+        movieSearchDto.setScore(movie.getScore());
+        return movieSearchDto;
+    }
+
+    // 리액트 요청에 맞춰서 전체 정보 반환 D
+    public MovieResDto convertToMovieInfo(Movie movie) {
+        MovieResDto movieResDto = new MovieResDto();
+        movieResDto.setId(movie.getId());
+        movieResDto.setTitle(movie.getTitle());
+        movieResDto.setPosters(movie.getPosters());
+        movieResDto.setTitleEng(movie.getTitleEng());
+        movieResDto.setReprlsDate(movie.getReprlsDate());
+        movieResDto.setGenre(movie.getGenre());
+        movieResDto.setRating(movie.getRating());
+        movieResDto.setRuntime(movie.getRuntime());
+        movieResDto.setScore(movie.getScore());
+        movieResDto.setDirectorNm(movie.getDirectorNm());
+        movieResDto.setActorNm(movie.getActorNm());
+        movieResDto.setPlotText(movie.getPlotText());
+        movieResDto.setStlls(movie.getStlls());
+        return movieResDto;
     }
 }
