@@ -53,7 +53,12 @@ public class MemberController {
         return ResponseEntity.ok(memberService.membershipSave(id));
     }
 
-
+    @GetMapping("/iskiki")
+    public ResponseEntity<Boolean> getIsMembership(){
+        Long id = SecurityUtil.getCurrentMemberId();
+        log.info("id : {}", id);
+        return ResponseEntity.ok(memberService.isMembership(id));
+    }
 
     // 회원 탈퇴
     @PostMapping("/withdraw")
@@ -62,6 +67,8 @@ public class MemberController {
         log.info("id : {}", id);
         return ResponseEntity.ok(memberService.withdrawMember(id));
     }
+
+
 
 
 }

@@ -93,6 +93,7 @@ public class MovieService {
     // 무비서치 DTO변환
     public MovieSearchDto convertToMovieSearch(Movie movie) {
         MovieSearchDto movieSearchDto = new MovieSearchDto();
+        movieSearchDto.setId(movie.getId());
         movieSearchDto.setTitle(movie.getTitle());
         movieSearchDto.setPosters(movie.getPosters());
         movieSearchDto.setPlotText(movie.getPlotText());
