@@ -10,10 +10,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class AdminMemberDto {
     // 유저(이미지, 닉네임) 이름, 이메일, 전화번호, 카카오 연동, 멤버십여부, 등록날짜, 탈퇴 정보, 주소 필요
-    private String profile;
+    private String image;
     private String alias;
     private String name;
     private String email;
@@ -26,9 +25,9 @@ public class AdminMemberDto {
 
 
     // DTO에 담음
-    public static AdminMemberDto of (Member member){
+    public static AdminMemberDto of(Member member){
         return AdminMemberDto.builder()
-                .profile(member.getImage())
+                .image(member.getImage())
                 .alias(member.getAlias())
                 .name(member.getName())
                 .email(member.getEmail())

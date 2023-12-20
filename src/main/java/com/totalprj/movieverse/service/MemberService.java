@@ -153,7 +153,16 @@ public class MemberService {
 
     private AdminMemberDto convertMemEntityToDto(Member member){
         AdminMemberDto adminMemberDto = new AdminMemberDto();
-
+        adminMemberDto.setImage(member.getImage());
+        adminMemberDto.setAlias(member.getAlias());
+        adminMemberDto.setName(member.getName());
+        adminMemberDto.setEmail(member.getEmail());
+        adminMemberDto.setPhone(member.getPhone());
+        adminMemberDto.setIsKakao(member.isKakao());
+        adminMemberDto.setIsMembership(member.isMembership());
+        adminMemberDto.setRegDate(member.getRegDate());
+        adminMemberDto.setIsWithdraw(member.isWithdraw());
+        adminMemberDto.setAddr(member.getAddr());
 
         return adminMemberDto;
     }
