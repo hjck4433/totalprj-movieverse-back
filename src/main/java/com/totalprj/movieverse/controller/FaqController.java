@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @Slf4j
@@ -15,6 +17,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class FaqController {
     private final FaqService faqService;
+
+    // FAQ목록 보기
+    @GetMapping("/list")
+    public ResponseEntity<List<FaqDto>> getFaqList(){
+        log.info("faq리스트 조회 진입");
+        return ResponseEntity.ok(faqService.getFaqList());
+    }
 
     // FAQ 추가
     @PostMapping("/new")
