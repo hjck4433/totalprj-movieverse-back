@@ -10,10 +10,14 @@ import com.totalprj.movieverse.repository.CategoryRepository;
 import com.totalprj.movieverse.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +52,7 @@ public class BoardService {
         }
     }
     // 게시물 전체 조회
-    public List<BoardResDto> getBoardList() {
+    public List<BoardResDto> getBoardList(Long id) {
         List<Board> boards = boardRepository.findAll();
         List<BoardResDto> boardResDtos = new ArrayList<>();
         for (Board board : boards) {
@@ -56,8 +60,25 @@ public class BoardService {
         }
         return boardResDtos;
     }
-
     // 게시물 상세 조회
+    public BoardResDto getBoardDetail(Long postId) {
+        BoardResDto boardResDto = new BoardResDto();
+        Board board = boardRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("해당하는 게시글이 없습니다."));
+        boardResDto = convertEntityToDto(board);
+        log.info("{}게시글 상세정보 추출 : ", boardResDto.getTitle());
+        return boardResDto;
+    }
+
+    // 게시글리스트 최신순 페이지네이션
+    public List<BoardResDto> getRecentBoard (int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("regDate"), Sort.Order.asc("title")));
+        return boardRepository.findAll(pageable)
+                .getContent()
+                .stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
 
 
     // 게시물 삭제
@@ -82,6 +103,7 @@ public class BoardService {
     // 게시글 엔티티를 DTO로 변환
     private BoardResDto convertEntityToDto (Board board) {
         BoardResDto boardResDto = new BoardResDto();
+        boardResDto.setId(board.getId());
         boardResDto.setCategoryName(board.getCategory().getCategoryName());
         boardResDto.setTitle(board.getTitle());
         boardResDto.setBoardContent(board.getBoardContent());
