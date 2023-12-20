@@ -63,4 +63,12 @@ public class MovieController {
         int pageCnt = movieService.getMoviePage(pageRequest);
         return ResponseEntity.ok(pageCnt);
     }
+
+    // 영화 제목으로 검색
+    @GetMapping("/movielist/search")
+    public ResponseEntity<List<MovieSearchDto>> searchMoviesByTitle(
+            @RequestParam String title) {
+        List<MovieSearchDto> searchedMovies = movieService.searchMoviesByTitle(title);
+        return ResponseEntity.ok(searchedMovies);
+    }
 }

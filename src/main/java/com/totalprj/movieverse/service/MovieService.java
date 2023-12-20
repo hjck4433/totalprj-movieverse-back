@@ -118,6 +118,14 @@ public class MovieService {
         return movieRepository.findAll(pageable).getTotalPages();
     }
 
+    // 영화 제목으로 검색
+    public List<MovieSearchDto> searchMoviesByTitle(String title) {
+        List<Movie> movies = movieRepository.findByTitleContaining(title);
+        return movies.stream()
+                .map(this::convertToMovieSearch)
+                .collect(Collectors.toList());
+    }
+
     // 무비서치 DTO변환
     public MovieSearchDto convertToMovieSearch(Movie movie) {
         MovieSearchDto movieSearchDto = new MovieSearchDto();
