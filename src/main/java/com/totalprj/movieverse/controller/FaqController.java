@@ -1,6 +1,7 @@
 package com.totalprj.movieverse.controller;
 
 import com.totalprj.movieverse.dto.FaqDto;
+import com.totalprj.movieverse.security.SecurityUtil;
 import com.totalprj.movieverse.service.FaqService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,5 +31,10 @@ public class FaqController {
         return ResponseEntity.ok(faqService.reviseFaq(faqDto));
     }
 
-
+    // FAQ 삭제
+    @DeleteMapping("/delete/{faqId}")
+    ResponseEntity<Boolean> deleteFaq(@PathVariable Long faqId) {
+        log.info("FAQ 삭제하기 {}");
+        return ResponseEntity.ok(faqService.deleteFaq(faqId));
+    }
 }

@@ -43,16 +43,27 @@ public class FaqService {
 
         // 수정된 Faq 저장
         Faq saved = faqRepository.save(faq);
-        return true;
-    }catch(Exception e){
-        e.printStackTrace();
-        return false;
+            return true;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
-}
 
+    // faq 삭제
+    public boolean deleteFaq(Long faqId){
+        try {
+            Faq faq = faqRepository.findById(faqId)
+                    .orElseThrow(()->new RuntimeException("해당 게시글이 존재하지 않습니다"));
 
+            faqRepository.delete(faq);
 
-
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
 
