@@ -1,6 +1,7 @@
 package com.totalprj.movieverse.service;
 
 import com.totalprj.movieverse.dto.BoardReqDto;
+import com.totalprj.movieverse.dto.BoardResDto;
 import com.totalprj.movieverse.entity.Board;
 import com.totalprj.movieverse.entity.Category;
 import com.totalprj.movieverse.entity.Member;
@@ -10,6 +11,9 @@ import com.totalprj.movieverse.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +33,6 @@ public class BoardService {
             Category category = categoryRepository.findByCategoryName(boardDto.getCategoryName()).orElseThrow(
                     () -> new RuntimeException("해당 카테고리가 존재하지 않습니다.")
             );
-
             board.setMember(member);
             board.setCategory(category);
             board.setGatherType(boardDto.getGatherType());
@@ -44,9 +47,15 @@ public class BoardService {
             return false;
         }
     }
-
-
     // 게시물 전체 조회
+    public List<BoardResDto> getBoardList() {
+        List<Board> boards = boardRepository.findAll();
+        List<BoardResDto> boardResDtos = new ArrayList<>();
+        for (Board board : boards) {
+            boardResDtos.add(convertEntityToDto(board));
+        }
+        return boardResDtos;
+    }
 
     // 게시물 상세 조회
 
@@ -71,6 +80,16 @@ public class BoardService {
     // 회원 이메일로 게시글 조회
 
     // 게시글 엔티티를 DTO로 변환
+    private BoardResDto convertEntityToDto (Board board) {
+        BoardResDto boardResDto = new BoardResDto();
+        boardResDto.setCategoryName(board.getCategory().getCategoryName());
+        boardResDto.setTitle(board.getTitle());
+        boardResDto.setBoardContent(board.getBoardContent());
+        boardResDto.setImage(board.getImage());
+        boardResDto.setGatherType(board.getGatherType());
+        boardResDto.setRegDate(board.getRegdate());
+        return boardResDto;
+    }
 
     // 페이지 수 조회
 }
