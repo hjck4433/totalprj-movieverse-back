@@ -121,6 +121,7 @@ public class PythonApiService {
             movieDto.setDirectorNm(movie.get("directorNm"));
             movieDto.setActorNm(movie.get("actorNm"));
             movieDto.setPlotText(movie.get("plotText"));
+            movieDto.setStlls(movie.get("stlls"));
             movieDtoList.add(movieDto);
         }
 
