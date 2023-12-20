@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -134,6 +136,40 @@ public class MemberService {
             adminMemberDtos.add(convertMemEntityToDto(member));
         }
         return adminMemberDtos;
+    }
+
+    // 월별 가입자 수
+    public List<Map <String, Object>> getMonthlySignupCount() {
+        try{
+            List<Map<String, Object>> result = new ArrayList<>();
+            List<Map<String, Object>> rawResult = memberRepository.getMonthlySignupCount();
+
+            //rawResult 가공
+            for (Map<String, Object> entry : rawResult){
+                Long month = ((Number) entry.get("month")).longValue(); // Convert to Long
+                Object countObject = entry.get("count");
+
+                // Check the type of count and perform the conversion
+                Integer count;
+                if (countObject instanceof Number) {
+                    count = ((Number) countObject).intValue();
+                } else {
+                    throw new IllegalStateException("Unexpected count type: " + countObject.getClass());
+                }
+
+                Map<String, Object> monthData = new HashMap<>();
+                monthData.put("month",month+"월");
+                monthData.put("monthlyUser", count);
+
+                result.add(monthData);
+            }
+            log.info("monthly : {}", result );
+            return result;
+        }catch (Exception e) {
+            log.error("월별 가입자 수 조회 중 오류 발생", e);
+            throw new RuntimeException("월별 가입자 수 조회 중 오류 발생2", e);
+        }
+
     }
 
 

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 @RestController
@@ -85,6 +86,15 @@ public class MemberController {
         List<AdminMemberDto> list = memberService.getAdminMemList(page, size);
         return ResponseEntity.ok(list);
     }
+
+    // 월별 가입자
+    @GetMapping("/admin/monthly")
+    public ResponseEntity<List<Map <String, Object>>> monthlyUserList(){
+        log.info("montly 진입");
+        List<Map <String, Object>> list = memberService.getMonthlySignupCount();
+        return ResponseEntity.ok(list);
+    }
+
 
     // 회원 탈퇴
     @PostMapping("/withdraw")
