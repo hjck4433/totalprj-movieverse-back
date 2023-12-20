@@ -15,7 +15,7 @@ public class FaqService {
 
 
 
-    // faq 추가 기능 만들기
+    // faq 추가
     public boolean createFaq(FaqDto faqDto) {
         // Faq 객체 생성
         Faq faq = new Faq();
@@ -29,9 +29,37 @@ public class FaqService {
         return true;
     }
 
+
+    // faq 수정
+    public boolean reviseFaq(FaqDto faqDto) {
+        try {
+            Faq faq = faqRepository.findById(faqDto.getFaqId()).orElseThrow(
+                    ()->new RuntimeException("수정할 게시글이 없습니다.")
+            );
+
+            // 수정할 내용을 설정
+            faq.setFaqAnswer(faqDto.getFaqAnswer());
+            faq.setFaqQuestion(faqDto.getFaqQuestion());
+
+        // 수정된 Faq 저장
+        Faq saved = faqRepository.save(faq);
+        return true;
+    }catch(Exception e){
+        e.printStackTrace();
+        return false;
+    }
+}
+
+
+
+
+
+
+
     //엔티티를 Dto로 변환
     public FaqDto convertEntityToDto(Faq faq){
         FaqDto faqDto = new FaqDto();
+        faqDto.setFaqId(faq.getFaqId());
         faqDto.setFaqAnswer(faq.getFaqAnswer());
         faqDto.setFaqQuestion(faq.getFaqQuestion());
         return faqDto;
