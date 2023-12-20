@@ -1,5 +1,6 @@
 package com.totalprj.movieverse.service;
 
+import com.totalprj.movieverse.dto.AdminMemberDto;
 import com.totalprj.movieverse.dto.MemberReqDto;
 import com.totalprj.movieverse.dto.MemberResDto;
 import com.totalprj.movieverse.entity.Kakao;
@@ -9,11 +10,15 @@ import com.totalprj.movieverse.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.asm.Advice;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -105,6 +110,32 @@ public class MemberService {
         }
     }
 
+    // Admin - 회원 전체 조회
+    public List<AdminMemberDto> getAdminMemList() {
+        List<Member> members = memberRepository.findAll();
+        List<AdminMemberDto> adminMemberDtos = new ArrayList<>();
+        for(Member member : members) {
+            adminMemberDtos.add(convertMemEntityToDto(member));
+        }
+        return adminMemberDtos;
+    }
+
+    // Admin - 총 페이지 수
+    public int getAdminMemberPage(Pageable pageable){
+        return memberRepository.findAll(pageable).getTotalPages();
+    }
+
+    // Admin - 회원조회 : 페이지네이션
+    public List<AdminMemberDto> getAdminMemList(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        List<Member> members = memberRepository.findAll(pageable).getContent();
+        List<AdminMemberDto> adminMemberDtos = new ArrayList<>();
+        for(Member member : members) {
+            adminMemberDtos.add(convertMemEntityToDto(member));
+        }
+        return adminMemberDtos;
+    }
+
 
     // 회원 엔티티를 회원 DTO로 변환
     private MemberResDto convertEntityToDto(Member member){
@@ -120,7 +151,12 @@ public class MemberService {
         return memberResDto;
     }
 
+    private AdminMemberDto convertMemEntityToDto(Member member){
+        AdminMemberDto adminMemberDto = new AdminMemberDto();
 
+
+        return adminMemberDto;
+    }
 }
 
 
