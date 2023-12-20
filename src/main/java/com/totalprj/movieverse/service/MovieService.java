@@ -9,11 +9,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
-
-import com.totalprj.movieverse.service.KmdbApiService;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -49,7 +48,6 @@ public class MovieService {
         return checkList;
     }
 
-
     // 영화 정보 저장
     public void saveMovieList(List<MovieDto> checkedList) {
         for (MovieDto movieDto : checkedList) {
@@ -71,9 +69,6 @@ public class MovieService {
         }
     }
 
-
-
-
     // DB에서 영화 상세정보 가져오기
     public MovieResDto getMovieDetail(Long id) {
         MovieResDto movieDetail = new MovieResDto();
@@ -85,8 +80,6 @@ public class MovieService {
 
         return movieDetail;
     }
-
-
 
     // DB에서 영화정보 가져오기
     public List<MovieSearchDto> getMovieList() {
@@ -100,23 +93,30 @@ public class MovieService {
         return movieList;
     }
 
-    // 무비리스트 페이지네이션
-    public List<MovieSearchDto> getMovieList(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        List<Movie> movies = movieRepository.findAll(pageable).getContent();
-        List<MovieSearchDto> movieList = new ArrayList<>();
-        for (Movie movie : movies) {
-            MovieSearchDto searchDto = convertToMovieSearch(movie);
-            movieList.add(searchDto);
-        }
-        return movieList;
-
+    // 무비리스트 최신영화순 페이지네이션
+    public List<MovieSearchDto> getRecentMovies(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("reprlsDate"), Sort.Order.asc("title")));
+        return movieRepository.findAll(pageable)
+                .getContent()
+                .stream()
+                .map(this::convertToMovieSearch)
+                .collect(Collectors.toList());
     }
+
+    // 무비리스트 오래된순 페이지네이션
+    public List<MovieSearchDto> getFormerMovies(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.asc("reprlsDate"), Sort.Order.asc("title")));
+        return movieRepository.findAll(pageable)
+                .getContent()
+                .stream()
+                .map(this::convertToMovieSearch)
+                .collect(Collectors.toList());
+    }
+
     // 무비리스트 페이지 수 조회
     public int getMoviePage(Pageable pageable) {
         return movieRepository.findAll(pageable).getTotalPages();
     }
-
 
     // 무비서치 DTO변환
     public MovieSearchDto convertToMovieSearch(Movie movie) {
