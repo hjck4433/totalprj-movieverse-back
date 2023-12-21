@@ -87,6 +87,14 @@ public class MemberController {
         return ResponseEntity.ok(list);
     }
 
+    // Admin - 회원정보 삭제
+    @DeleteMapping("/admin/delete/{id}")
+    ResponseEntity<Boolean> deleteMember(@PathVariable Long id){
+        log.info("회원정보 삭제 {}", id);
+        return ResponseEntity.ok(memberService.deleteMember(id));
+    }
+
+
     // 월별 가입자
     @GetMapping("/admin/monthly")
     public ResponseEntity<List<Map <String, Object>>> monthlyUserList(){

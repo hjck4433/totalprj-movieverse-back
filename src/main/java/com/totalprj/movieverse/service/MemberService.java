@@ -138,6 +138,21 @@ public class MemberService {
         return adminMemberDtos;
     }
 
+    // Admin - 회원정보 삭제
+    public boolean deleteMember(Long id) {
+        try {
+            Member member = memberRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
+            memberRepository.delete(member);
+            log.info("회원 정보가 삭제되었습니다. 회원 ID: {}", id);
+            return true;
+        } catch (Exception e) {
+            log.error("회원 정보 삭제 중 오류 발생", e);
+            return false;
+        }
+    }
+
+
     // 월별 가입자 수
     public List<Map <String, Object>> getMonthlySignupCount() {
         try{
