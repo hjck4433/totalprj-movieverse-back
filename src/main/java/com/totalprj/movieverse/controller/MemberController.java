@@ -105,7 +105,7 @@ public class MemberController {
 
 
     // 회원 탈퇴
-    @PostMapping("/withdraw")
+    @PutMapping("/withdraw")
     public ResponseEntity<Boolean> withdrawMember(){
         Long id = SecurityUtil.getCurrentMemberId();
         log.info("id : {}", id);

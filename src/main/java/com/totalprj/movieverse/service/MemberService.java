@@ -204,6 +204,7 @@ public class MemberService {
 
     private AdminMemberDto convertMemEntityToDto(Member member){
         AdminMemberDto adminMemberDto = new AdminMemberDto();
+        adminMemberDto.setId(member.getId());
         adminMemberDto.setImage(member.getImage());
         adminMemberDto.setAlias(member.getAlias());
         adminMemberDto.setName(member.getName());
