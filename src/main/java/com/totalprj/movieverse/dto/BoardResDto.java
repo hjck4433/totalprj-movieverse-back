@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 public class BoardResDto {
     private Long id;
+    private String memberAlias;
+    private String memberImage;
     private String categoryName;
     private String gatherType;
     private String title;

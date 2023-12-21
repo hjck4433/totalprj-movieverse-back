@@ -104,6 +104,8 @@ public class BoardService {
     private BoardResDto convertEntityToDto (Board board) {
         BoardResDto boardResDto = new BoardResDto();
         boardResDto.setId(board.getId());
+        boardResDto.setMemberAlias(board.getMember().getAlias());
+        boardResDto.setMemberImage(board.getMember().getImage());
         boardResDto.setCategoryName(board.getCategory().getCategoryName());
         boardResDto.setTitle(board.getTitle());
         boardResDto.setBoardContent(board.getBoardContent());
