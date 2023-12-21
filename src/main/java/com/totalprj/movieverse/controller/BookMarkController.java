@@ -1,11 +1,14 @@
 package com.totalprj.movieverse.controller;
 
+import com.totalprj.movieverse.dto.MovieSearchDto;
 import com.totalprj.movieverse.security.SecurityUtil;
 import com.totalprj.movieverse.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -33,6 +36,13 @@ public class BookMarkController {
         log.info("북마크 해제 진입");
         Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(bookmarkService.removeBookMark(memberId, movieId));
+    }
+
+    @GetMapping("/member/movielist")
+    ResponseEntity<List<MovieSearchDto>> memberMovieList() {
+        log.info("북마크된 영화 리스트 진입");
+        Long id = SecurityUtil.getCurrentMemberId();
+        return ResponseEntity.ok(bookmarkService.memberMovieList(id));
     }
 
 }

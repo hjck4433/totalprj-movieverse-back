@@ -186,31 +186,34 @@ public class PythonApiService {
                 throw new RuntimeException("엔티티 객체 생성 실패.", e);
             }
 
-            // 제목, 감독 정보를 기준으로 영화 검색
-            String title = data.get("title");
-            String director = data.get("director");
-            log.info("title: {} director : {}", title, director);
-            Movie movie = movieRepository.findByTitle(title)
-                    .orElseThrow(() -> new RuntimeException(title+"영화가 존재하지 않습니다."));
+            try {
+                // 제목, 감독 정보를 기준으로 영화 검색
+                String title = data.get("title");
+                String director = data.get("director");
+                log.info("title: {} director : {}", title, director);
+                Movie movie = movieRepository.findByTitle(title)
+                        .orElseThrow(() -> new RuntimeException(title+"영화가 존재하지 않습니다."));
 
-            // 해당하는 entity에 set
-            if (entity instanceof Boxoffice) {
-                log.info("Boxoffice 저장 중");
-                ((Boxoffice) entity).setMovie(movie);
-            }else if(entity instanceof OttNetflix) {
-                log.info("Netflix 저장 중");
-                ((OttNetflix) entity).setMovie(movie);
-            }else if(entity instanceof OttWatcha) {
-                log.info("Watcha 저장 중");
-                ((OttWatcha) entity).setMovie(movie);
-            }else if(entity instanceof OttTving) {
-                log.info("Tving 저장 중");
-                ((OttTving) entity).setMovie(movie);
+                // 해당하는 entity에 set
+                if (entity instanceof Boxoffice) {
+                    log.info("Boxoffice 저장 중");
+                    ((Boxoffice) entity).setMovie(movie);
+                }else if(entity instanceof OttNetflix) {
+                    log.info("Netflix 저장 중");
+                    ((OttNetflix) entity).setMovie(movie);
+                }else if(entity instanceof OttWatcha) {
+                    log.info("Watcha 저장 중");
+                    ((OttWatcha) entity).setMovie(movie);
+                }else if(entity instanceof OttTving) {
+                    log.info("Tving 저장 중");
+                    ((OttTving) entity).setMovie(movie);
+                }
+
+                // 저장
+                repository.save(entity);
+            } catch (RuntimeException e ) {
+                log.error("저장 할 영화를 찾을 수 없습니다.",e);
             }
-
-            // 저장
-            repository.save(entity);
-
         }
     }
 
