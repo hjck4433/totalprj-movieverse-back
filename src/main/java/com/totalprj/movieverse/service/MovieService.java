@@ -7,6 +7,7 @@ import com.totalprj.movieverse.entity.Movie;
 import com.totalprj.movieverse.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -113,17 +114,41 @@ public class MovieService {
                 .collect(Collectors.toList());
     }
 
-    // 무비리스트 페이지 수 조회
-    public int getMoviePage(Pageable pageable) {
-        return movieRepository.findAll(pageable).getTotalPages();
-    }
-
-    // 영화 제목으로 검색
-    public List<MovieSearchDto> searchMoviesByTitle(String title) {
-        List<Movie> movies = movieRepository.findByTitleContaining(title);
+    // 영화 키워드로 검색
+    public List<MovieSearchDto> searchMoviesByKeyword(String keyword, Pageable pageable) {
+        Page<Movie> movies = movieRepository.findByKeyword(keyword, pageable);
         return movies.stream()
                 .map(this::convertToMovieSearch)
                 .collect(Collectors.toList());
+    }
+
+    public List<MovieSearchDto> getProcessedMovieList(int page, int size, String sort, String keyword) {
+
+        List<MovieSearchDto> movieList = new ArrayList<>();
+
+        if (sort.equalsIgnoreCase("recent")) {
+            Pageable pageableRecent = PageRequest.of(page, size, Sort.by(Sort.Order.desc("reprlsDate"), Sort.Order.asc("title")));
+            if(keyword != null ){
+                movieList = searchMoviesByKeyword(keyword, pageableRecent);
+            }else {
+                movieList = getRecentMovies(page, size);
+            }
+
+        }else if (sort.equalsIgnoreCase("former")){
+            Pageable pageableFormer = PageRequest.of(page, size, Sort.by(Sort.Order.asc("reprlsDate"), Sort.Order.asc("title")));
+            if(keyword != null ){
+                movieList = searchMoviesByKeyword(keyword, pageableFormer);
+            }else {
+                movieList = getFormerMovies(page, size);
+            }
+
+        }
+        return movieList;
+    }
+
+    // 무비리스트 페이지 수 조회
+    public int getMoviePage(Pageable pageable) {
+        return movieRepository.findAll(pageable).getTotalPages();
     }
 
     // 무비서치 DTO변환

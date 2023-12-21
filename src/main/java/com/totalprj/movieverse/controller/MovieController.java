@@ -35,24 +35,6 @@ public class MovieController {
         return ResponseEntity.ok(movieDetail);
     }
 
-    // 최신영화순 페이지네이션
-    @GetMapping("/movielist/recent")
-    public ResponseEntity<List<MovieSearchDto>> getRecentMovies(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size) {
-        List<MovieSearchDto> recentMovies = movieService.getRecentMovies(page, size);
-        return ResponseEntity.ok(recentMovies);
-    }
-
-    // 오래된순 페이지네이션
-    @GetMapping("/movielist/former")
-    public ResponseEntity<List<MovieSearchDto>> getFormerMovies(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size) {
-        List<MovieSearchDto> formerMovies = movieService.getFormerMovies(page, size);
-        return ResponseEntity.ok(formerMovies);
-    }
-
     // 무비리스트 페이지 수 조회
     @GetMapping("/movielist/count")
     public ResponseEntity<Integer> movieCount(
@@ -64,11 +46,15 @@ public class MovieController {
         return ResponseEntity.ok(pageCnt);
     }
 
-    // 영화 제목으로 검색
-    @GetMapping("/movielist/search")
-    public ResponseEntity<List<MovieSearchDto>> searchMoviesByTitle(
-            @RequestParam String title) {
-        List<MovieSearchDto> searchedMovies = movieService.searchMoviesByTitle(title);
-        return ResponseEntity.ok(searchedMovies);
+    // 영화 무한 스크롤 페이지네이션
+    @GetMapping("/movielist/paged")
+    public ResponseEntity<List<MovieSearchDto>> getPagedMovieList (
+            @RequestParam(name ="page", defaultValue = "0") int page,
+            @RequestParam(name="size", defaultValue = "8") int size,
+            @RequestParam(name ="sort", defaultValue = "recent") String sort,
+            @RequestParam(name="keyword", required = false) String keyword
+    ){
+        List<MovieSearchDto> movieList = movieService.getProcessedMovieList(page, size, sort, keyword);
+        return ResponseEntity.ok(movieList);
     }
 }
