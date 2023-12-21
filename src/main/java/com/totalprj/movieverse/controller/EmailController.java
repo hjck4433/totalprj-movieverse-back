@@ -31,13 +31,12 @@ public class EmailController {
         System.out.println("202312 : " + tempPw);
 
         //이메일에 들어갈 내용
-        String htmlContent = "<div style=\"text-align: center; display:flex; flex-direction:column; justify-content:center; text-align:center;\">"
-                + "<p style=\"font-size:30px; display: block;\">MovieVerse에 오신 것을 환영 합니다!</p>"
-                + "<p></p>"
-                + "<p style=\"font-size:16px; display: block;\">요청하신 인증번호를 보내드립니다.</p>"
-                + "<p></p>"
-                + "<div style=\"font-size:20px; font-style:bold; width: 1000px; height:50px; border: 1px solid #c6c6c6; display: block;\">" + tempPw + "</div>"
+        String htmlContent = "<div style=\"margin: auto; padding: 50px; text-align: center; width: 700px; height: 200px; background-color: #0c134f; border-radius: 20px;\">"
+                + "<p style=\"font-size: 30px; color: violet; font-weight: 600;\">MovieVerse에 오신 것을 환영합니다!</p>"
+                + "<p style=\"font-size: 16px; color: #d4adfc;\">요청하신 인증번호를 보내드립니다.</p>"
+                + "<div style=\"font-size: 20px; color: #ccc;\">" + tempPw + "</div>"
                 + "</div>";
+
         ;
 
         //이메일로 전송
