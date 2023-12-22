@@ -39,10 +39,13 @@ public class BookMarkController {
     }
 
     @GetMapping("/member/movielist")
-    ResponseEntity<List<MovieSearchDto>> memberMovieList() {
+    ResponseEntity<List<MovieSearchDto>> memberMovieList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size
+    ) {
         log.info("북마크된 영화 리스트 진입");
         Long id = SecurityUtil.getCurrentMemberId();
-        return ResponseEntity.ok(bookmarkService.memberMovieList(id));
+        return ResponseEntity.ok(bookmarkService.memberMovieList(id, page, size));
     }
 
 }

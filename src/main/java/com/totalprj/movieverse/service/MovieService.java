@@ -122,6 +122,7 @@ public class MovieService {
                 .collect(Collectors.toList());
     }
 
+
     public List<MovieSearchDto> getProcessedMovieList(int page, int size, String sort, String keyword) {
 
         List<MovieSearchDto> movieList = new ArrayList<>();

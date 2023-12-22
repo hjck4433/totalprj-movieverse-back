@@ -9,6 +9,10 @@ import com.totalprj.movieverse.repository.MemberRepository;
 import com.totalprj.movieverse.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -75,10 +79,12 @@ public class BookmarkService {
     }
 
     // 회원 북마크 정보 불러오기
-    public List<MovieSearchDto> memberMovieList (Long id){
+    public List<MovieSearchDto> memberMovieList (Long id, int page, int size){
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당 회원이 존재 하지 않습니다."));
-        List<Bookmark> bookmarks = bookmarkRepository.findAllByMember(member);
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
+        Page<Bookmark> bookmarks = bookmarkRepository.findAllByMember(member, pageable);
 
         List<MovieSearchDto> movieList = new ArrayList<>();
 
