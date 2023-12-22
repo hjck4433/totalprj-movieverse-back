@@ -47,6 +47,6 @@ public class MemberRepositoryTest {
 
         em.flush();
         em.clear();
-        System.out.println(testMember);
+        System.out.println("testMember 결과 : " +testMember);
     }
 }

@@ -79,7 +79,7 @@ public class BoardRepositoryTest {
 
         Board savedBoard = boardRepository.findById(board.getId()).orElseThrow(EntityNotFoundException::new);
 
-        System.out.println(savedBoard);
+        System.out.println("savedBoard test 결과 : " + savedBoard);
     }
 
 }
