@@ -5,8 +5,10 @@ import com.totalprj.movieverse.dto.MemberReqDto;
 import com.totalprj.movieverse.dto.MemberResDto;
 import com.totalprj.movieverse.entity.Kakao;
 import com.totalprj.movieverse.entity.Member;
+import com.totalprj.movieverse.entity.RefreshToken;
 import com.totalprj.movieverse.repository.KakaoRepository;
 import com.totalprj.movieverse.repository.MemberRepository;
+import com.totalprj.movieverse.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.asm.Advice;
@@ -30,6 +32,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final KakaoRepository kakaoRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     // 회원 상세 조회
     public MemberResDto getMemberDetail(Long id){
@@ -76,7 +79,12 @@ public class MemberService {
         try {
             Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
             member.setWithdraw(true);
+            member.setEmail(member.getEmail().concat("-"));
             memberRepository.save(member);
+            RefreshToken refreshToken = refreshTokenRepository.findByMember(member)
+                    .orElseThrow(() -> new RuntimeException("Token정보가 없습니다."));
+            refreshTokenRepository.delete(refreshToken);
+
             return true;
         }catch (Exception e){
             log.info("회원탈퇴 처리 중 오류 발생");
@@ -143,8 +151,8 @@ public class MemberService {
         try {
             Member member = memberRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
-            memberRepository.delete(member);
             log.info("회원 정보가 삭제되었습니다. 회원 ID: {}", id);
+            memberRepository.delete(member);
             return true;
         } catch (Exception e) {
             log.error("회원 정보 삭제 중 오류 발생", e);
