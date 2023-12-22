@@ -18,6 +18,7 @@ import java.util.List;
 public class CommentController {
     private final CommnetService commnetService;
 
+    // 댓글 저장
     @PostMapping("/new")
     public ResponseEntity<Boolean> saveNewComment(@RequestBody CommentReqDto commentReqDto) {
         log.info("댓글 저장 진입");
@@ -25,9 +26,24 @@ public class CommentController {
         return ResponseEntity.ok(commnetService.saveComment(commentReqDto, id));
     }
 
+    //댓글 전체 리스트 조회
     @GetMapping("/{id}")
-    public ResponseEntity<List> commentList(Long id) {
+    public ResponseEntity<List<CommentResDto>> commentList(@PathVariable Long id) {
         List<CommentResDto> list = commnetService.getCommentList(id);
         return ResponseEntity.ok(list);
+    }
+
+    // 댓글 수정
+    @PostMapping("/modify")
+    public ResponseEntity<Boolean> commentModify(@RequestBody CommentReqDto commentReqDto) {
+        boolean result = commnetService.commentModify(commentReqDto);
+        return ResponseEntity.ok(result);
+    }
+
+    // 댓글 삭제
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> commentDelete(@PathVariable Long id) {
+        boolean result = commnetService.commentDelete(id);
+        return ResponseEntity.ok(result);
     }
 }

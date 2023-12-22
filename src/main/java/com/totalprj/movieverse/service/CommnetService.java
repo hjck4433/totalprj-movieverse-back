@@ -10,6 +10,7 @@ import com.totalprj.movieverse.repository.CommentRepository;
 import com.totalprj.movieverse.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.result.UpdateCountOutput;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -48,13 +49,45 @@ public class CommnetService {
 
     // 댓글 전체 목록 조회
     public List<CommentResDto> getCommentList (Long id) {
-        List<Comment> comments = commentRepository.findAll();
+        Board board = boardRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("해당 게시글이 존재하지않습니다"));
+        List<Comment> comments = commentRepository.findByBoard(board);
         List<CommentResDto> commentResDtos = new ArrayList<>();
         for (Comment comment : comments) {
             commentResDtos.add(convertEntityToDto(comment));
         }
         return commentResDtos;
     }
+
+    // 댓글 수정
+    public boolean commentModify (CommentReqDto commentReqDto) {
+        try {
+            Comment comment = commentRepository.findById(commentReqDto.getId()).orElseThrow(
+                    () -> new RuntimeException("해당 댓글이 존재하지 않습니다.")
+            );
+            comment.setCommentContent(commentReqDto.getCommentContent());
+            commentRepository.save(comment);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 댓글 삭제
+    public boolean commentDelete(Long id) {
+        try {
+            Comment comment = commentRepository.findById(id).orElseThrow(
+                    () -> new RuntimeException("해당 댓글이 존재하지 않습니다.")
+            );
+            commentRepository.delete(comment);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     // 댓글 엔티티를 Dto로 변환
     public CommentResDto convertEntityToDto (Comment comment) {
