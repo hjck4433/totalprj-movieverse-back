@@ -48,6 +48,9 @@ public class KakaoService {
             isExist = kakaoRepository.existsById(kakaoDto.getId());
             log.info("kakaoId exists? : {}",isExist);
             if(!isExist)saveKakaoEntity(kakaoDto);
+            else {
+                isExist = memberRepository.existsByEmail(kakaoDto.getKakaoAccount().getEmail());
+            }
         }
         kakaoInfo.put("isMember", isExist);
         kakaoInfo.put("userInfo", kakaoDto);

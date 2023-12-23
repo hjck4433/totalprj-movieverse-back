@@ -82,7 +82,8 @@ public class AuthService {
 
         // 탈퇴한 회원인지 체크
         if(member.isWithdraw()){
-            throw new RuntimeException("탈퇴한 회원입니다.");
+//            throw new RuntimeException("탈퇴한 회원입니다.");
+            return null;
         }
 
         // 이미 db에 해당 계정으로 저장된 refreshToken 정보가 있다면 삭제
