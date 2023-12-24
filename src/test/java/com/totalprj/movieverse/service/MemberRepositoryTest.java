@@ -105,4 +105,18 @@ public class MemberRepositoryTest {
         System.out.println(" memberDetailTest결과 : " +detailMember);
 
     }
+
+    @Test
+    @DisplayName("이메일과 비밀번호로 회원 찾기 테스트")
+    public void findMemberByEmailAndPasswordTest() {
+        Member member = createMemberInfo();
+        memberRepository.save(member);
+
+        Member foundMember = memberRepository.findByEmailAndPassword("test@gmail.com", "Test1234!").orElseThrow();
+
+        em.flush();
+        em.clear();
+
+        System.out.println("찾은 회원: " + foundMember);
+    }
 }
