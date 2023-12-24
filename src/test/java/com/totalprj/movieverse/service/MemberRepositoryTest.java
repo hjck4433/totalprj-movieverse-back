@@ -65,6 +65,33 @@ public class MemberRepositoryTest {
 
     }
 
+
+    @Test
+    @DisplayName("닉네임 중복 테스트")
+    public void isUniqueAliasTest(){
+        Member member = createMemberInfo();
+        memberRepository.save(member);
+        boolean isAliasUnique = memberRepository.existsByAlias("햄스터");
+
+        em.flush();
+        em.clear();
+        System.out.println("isAliasUnique결과 : " +isAliasUnique);
+
+    }
+
+    @Test
+    @DisplayName("전화번호 중복 테스트")
+    public void isUniquePhoneTest(){
+        Member member = createMemberInfo();
+        memberRepository.save(member);
+        boolean isPhoneUnique = memberRepository.existsByPhone("010-1234-5678");
+
+        em.flush();
+        em.clear();
+        System.out.println("isPhoneUnique 결과 : " +isPhoneUnique);
+
+    }
+
     @Test
     @DisplayName("내 정보 요청 테스트")
     public void memberDetailTest() {
