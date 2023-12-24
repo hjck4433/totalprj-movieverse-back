@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -48,5 +49,33 @@ public class MemberRepositoryTest {
         em.flush();
         em.clear();
         System.out.println("testMember 결과 : " +testMember);
+    }
+
+    @Test
+    @DisplayName("이메일 중복체크 테스트")
+    public void isUniqeEmailTest() {
+
+        Member member = createMemberInfo();
+        memberRepository.save(member);
+        boolean isUnique = memberRepository.existsByEmail("test1@gmail.com");
+
+        em.flush();
+        em.clear();
+        System.out.println("isUnique 결과 : " +isUnique);
+
+    }
+
+    @Test
+    @DisplayName("내 정보 요청 테스트")
+    public void memberDetailTest() {
+
+        Member member = createMemberInfo();
+        memberRepository.save(member);
+        Optional<Member> detailMember = memberRepository.findById(1L);
+
+        em.flush();
+        em.clear();
+        System.out.println(" memberDetailTest결과 : " +detailMember);
+
     }
 }
