@@ -28,21 +28,21 @@ public class BoardService {
     private final MemberRepository memberRepository;
 
     // 게시물 등록
-    public boolean saveBoard(BoardReqDto boardDto, Long id) {
+    public boolean saveBoard(BoardReqDto boardReqDto, Long id) {
         try {
             Board board = new Board();
             Member member = memberRepository.findById(id).orElseThrow(
                     () -> new RuntimeException("해당 회원이 존재하지 않습니다.")
             );
-            Category category = categoryRepository.findByCategoryName(boardDto.getCategoryName()).orElseThrow(
+            Category category = categoryRepository.findByCategoryName(boardReqDto.getCategoryName()).orElseThrow(
                     () -> new RuntimeException("해당 카테고리가 존재하지 않습니다.")
             );
             board.setMember(member);
             board.setCategory(category);
-            board.setGatherType(boardDto.getGatherType());
-            board.setTitle(boardDto.getTitle());
-            board.setImage(boardDto.getImage());
-            board.setBoardContent(boardDto.getBoardContent());
+            board.setGatherType(boardReqDto.getGatherType());
+            board.setTitle(boardReqDto.getTitle());
+            board.setImage(boardReqDto.getImage());
+            board.setBoardContent(boardReqDto.getBoardContent());
 
             boardRepository.save(board);
             return true;
@@ -51,6 +51,7 @@ public class BoardService {
             return false;
         }
     }
+
     // 게시물 전체 조회
     public List<BoardResDto> getBoardList(Long id) {
         List<Board> boards = boardRepository.findAll();
@@ -60,6 +61,7 @@ public class BoardService {
         }
         return boardResDtos;
     }
+
     // 게시물 상세 조회
     public BoardResDto getBoardDetail(Long postId) {
         BoardResDto boardResDto = new BoardResDto();
@@ -71,7 +73,7 @@ public class BoardService {
     }
 
     // 게시글리스트 최신순 페이지네이션
-    public List<BoardResDto> getRecentBoard (int page, int size) {
+    public List<BoardResDto> getRecentBoard(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("regDate"), Sort.Order.asc("title")));
         return boardRepository.findAll(pageable)
                 .getContent()
@@ -94,6 +96,42 @@ public class BoardService {
             return false;
         }
     }
+
+    // 게시판 정보 수정
+    public boolean modifyBoard(BoardReqDto boardReqDto) {
+        try {
+            Board board = boardRepository.findById(boardReqDto.getId()).orElseThrow(
+                    () -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
+            Category category = categoryRepository.findByCategoryName(boardReqDto.getCategoryName()).orElseThrow(
+                    () -> new RuntimeException("해당 카테고리가 존재하지 않습니다."));
+
+            // 값이 null이 아니면 업데이트, null이면 기존 값 유지
+            if (boardReqDto.getCategoryName() != null) {
+                board.setCategory(category);
+            }
+            if (boardReqDto.getGatherType() != null) {
+                board.setGatherType(boardReqDto.getGatherType());
+            }
+            if (boardReqDto.getTitle() != null) {
+                board.setTitle(boardReqDto.getTitle());
+            }
+            if (boardReqDto.getImage() != null) {
+                board.setImage(boardReqDto.getImage());
+            }
+            if (boardReqDto.getBoardContent() != null) {
+                board.setBoardContent(boardReqDto.getBoardContent());
+            }
+
+            boardRepository.save(board);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
     // 게시물 검색
 
     // 게시글 페이징

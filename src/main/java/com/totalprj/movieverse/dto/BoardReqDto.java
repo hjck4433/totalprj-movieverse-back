@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BoardReqDto {
+    private Long id;
     private String categoryName;
     private String gatherType;
     private String title;

@@ -42,6 +42,13 @@ public class BoardController {
         return ResponseEntity.ok(boardResDto);
     }
 
+    // 게시판 수정
+    @PostMapping("/update")
+    public ResponseEntity<Boolean> updateBoard(@RequestBody BoardReqDto boardReqDto) {
+        log.info("boardReqDto : ", boardReqDto);
+        return ResponseEntity.ok(boardService.modifyBoard(boardReqDto));
+    }
+
     // 게시글 최신순 페이지네이션
 //    @GetMapping()
 
