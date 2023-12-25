@@ -14,6 +14,7 @@ import org.hibernate.result.UpdateCountOutput;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -103,7 +104,8 @@ public class CommnetService {
 
     // 댓글 페이지네이션
     public List<CommentResDto> getCommentPageList(int page, int size, Long boardId) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("commentRegdate")));
+
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new RuntimeException("해당하는 id 값이 없습니다. " + boardId)
         );

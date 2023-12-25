@@ -32,8 +32,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Page<Board> findByMember(Member member, Pageable pageable);
 
     // 회원이 작성한 댓글이 포함된 보드
-    @Query("SELECT DISTINCT b FROM Board b " +
-            "JOIN FETCH b.comments c " +
-            "WHERE c.member = :member")
+    @Query("SELECT b FROM Board b " +
+            "WHERE b.id IN (SELECT c.board.id FROM Comment c WHERE c.member = :member)")
     Page<Board> findByCommentingMember(@Param("member") Member member, Pageable pageable);
+
 }
