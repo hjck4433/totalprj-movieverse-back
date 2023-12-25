@@ -10,6 +10,7 @@ import com.totalprj.movieverse.repository.CategoryRepository;
 import com.totalprj.movieverse.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -53,7 +54,7 @@ public class BoardService {
     }
 
     // 게시물 전체 조회
-    public List<BoardResDto> getBoardList(Long id) {
+    public List<BoardResDto> getBoardList() {
         List<Board> boards = boardRepository.findAll();
         List<BoardResDto> boardResDtos = new ArrayList<>();
         for (Board board : boards) {
@@ -131,13 +132,6 @@ public class BoardService {
     }
 
 
-
-    // 게시물 검색
-
-    // 게시글 페이징
-
-    // 회원 이메일로 게시글 조회
-
     // 게시글 엔티티를 DTO로 변환
     private BoardResDto convertEntityToDto (Board board) {
         BoardResDto boardResDto = new BoardResDto();
@@ -153,5 +147,52 @@ public class BoardService {
         return boardResDto;
     }
 
+    // 페이지네이션 관련
+    public List<BoardResDto> getProcessedBoardList(int page, int size, String sort, String keyword, String categoryName, String gatherType) {
+        List<BoardResDto> boardList = new ArrayList<>();
+
+        if(sort.equalsIgnoreCase("recent")) {
+            Pageable pageableRecent = PageRequest.of(page, size, Sort.by(Sort.Order.desc("regdate"), Sort.Order.asc("title")));
+            // 검색어 있는 경우
+            boardList = searchBoardList(keyword,categoryName, gatherType, pageableRecent);
+
+        }else if (sort.equalsIgnoreCase("former")){
+            Pageable pageableFormer = PageRequest.of(page, size, Sort.by(Sort.Order.asc("regdate"), Sort.Order.asc("title")));
+            // 검색어 있는 경우
+            boardList = searchBoardList(keyword,categoryName, gatherType, pageableFormer);
+        }
+        return boardList;
+    }
+
+    public List<BoardResDto> searchBoardList(String keyword, String categoryName, String gatherType, Pageable pageable) {
+        Page<Board> boards = boardRepository.findByKeywordAndCategoryNameAndGatherType(
+                keyword,
+                categoryName,
+                gatherType,
+                pageable
+        );
+        return boards.stream()
+                .map(this::convertEntityToDto)
+                .collect(Collectors.toList());
+    }
+
     // 페이지 수 조회
+    public int getBoardListPage(int page, int size, String keyword, String categoryName, String gatherType){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Board> boards = boardRepository.findByKeywordAndCategoryNameAndGatherType(
+                keyword,
+                categoryName,
+                gatherType,
+                pageable
+        );
+        int totalPages = boards.getTotalPages();
+
+        // Ensure the last page is considered
+        if (totalPages > 0 && page >= totalPages) {
+            // If the requested page is out of bounds, return the last page
+            return totalPages - 1;
+        }
+
+        return totalPages;
+    }
 }

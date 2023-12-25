@@ -26,10 +26,9 @@ public class BoardController {
     }
 
     // 게시글 전체 조회
-    @GetMapping("/{id}")
-    public ResponseEntity<List> boardList(Long id) {
-//        log.info("게시판 조회 id : {}", id);
-        List<BoardResDto> list = boardService.getBoardList(id);
+    @GetMapping("/list")
+    public ResponseEntity<List<BoardResDto>> boardList() {
+        List<BoardResDto> list = boardService.getBoardList();
         return ResponseEntity.ok(list);
     }
 
@@ -49,7 +48,33 @@ public class BoardController {
         return ResponseEntity.ok(boardService.modifyBoard(boardReqDto));
     }
 
-    // 게시글 최신순 페이지네이션
-//    @GetMapping()
+    // 게시글 총 페이지 수
+    @GetMapping("/totalpages")
+    public ResponseEntity<Integer> getBoardTotalPages(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String categoryName,
+            @RequestParam(required = false) String gatherType
+    ) {
+        log.info("totalpages 진입");
+        int totalPages = boardService.getBoardListPage(page, size, keyword, categoryName, gatherType);
+        log.info("보드 총 페이지 : {}", totalPages);
+        return ResponseEntity.ok(totalPages);
+    }
+    // 게시글 리스트
+    @GetMapping("/processedlist")
+    public ResponseEntity<List<BoardResDto>> getProcessedBoardList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(defaultValue = "recent") String sort,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String categoryName,
+            @RequestParam(required = false) String gatherType
+    ) {
+        List<BoardResDto> boardList = boardService.getProcessedBoardList(page, size, sort, keyword, categoryName, gatherType);
+        return ResponseEntity.ok(boardList);
+    }
+
 
 }
