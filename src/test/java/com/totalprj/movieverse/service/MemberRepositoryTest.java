@@ -119,4 +119,19 @@ public class MemberRepositoryTest {
 
         System.out.println("찾은 회원: " + foundMember);
     }
+
+
+    @Test
+    @DisplayName("멤버십 여부 테스트")
+    public void isMembershipTest() {
+
+        Member member = createMemberInfo();
+        memberRepository.save(member);
+        boolean isMembership = memberRepository.existsById(member.getId());
+
+        em.flush();
+        em.clear();
+        System.out.println("isMembership 결과 : " +isMembership);
+
+    }
 }
