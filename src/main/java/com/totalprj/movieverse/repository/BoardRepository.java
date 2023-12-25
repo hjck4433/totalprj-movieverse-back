@@ -13,31 +13,27 @@ import java.util.List;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
-    List<Board> findByTitleContaining(String keyword);
     Page<Board> findAll(Pageable pageable);
-    List<Board> findByMember(Member member);
 
-//    @Query("SELECT b FROM Board b WHERE " +
-//            "(LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-//            "LOWER(b.boardContent) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
-//            "LOWER(b.category.categoryName) LIKE LOWER(CONCAT('%', :categoryName, '%')) AND " +
-//            "LOWER(b.gatherType) LIKE LOWER(CONCAT('%', :gatherType, '%'))")
-//    Page<Board> findByKeywordAndCategoryNameAndGatherType(
-//            @Param("keyword") String keyword,
-//            @Param("categoryName") String categoryName,
-//            @Param("gatherType") String gatherType,
-//            Pageable pageable
-//    );
-@Query("SELECT b FROM Board b WHERE " +
-        "(:keyword IS NULL OR (:keyword IS NOT NULL AND " +
-        "(LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-        "LOWER(b.boardContent) LIKE LOWER(CONCAT('%', :keyword, '%'))))) AND " +
-        "LOWER(b.category.categoryName) LIKE LOWER(CONCAT('%', :categoryName, '%')) AND " +
-        "LOWER(b.gatherType) LIKE LOWER(CONCAT('%', :gatherType, '%'))")
-Page<Board> findByKeywordAndCategoryNameAndGatherType(
-        @Param("keyword") String keyword,
-        @Param("categoryName") String categoryName,
-        @Param("gatherType") String gatherType,
-        Pageable pageable
-);
+    @Query("SELECT b FROM Board b WHERE " +
+            "(:keyword IS NULL OR (:keyword IS NOT NULL AND " +
+            "(LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(b.boardContent) LIKE LOWER(CONCAT('%', :keyword, '%'))))) AND " +
+            "LOWER(b.category.categoryName) LIKE LOWER(CONCAT('%', :categoryName, '%')) AND " +
+            "LOWER(b.gatherType) LIKE LOWER(CONCAT('%', :gatherType, '%'))")
+    Page<Board> findByKeywordAndCategoryNameAndGatherType(
+            @Param("keyword") String keyword,
+            @Param("categoryName") String categoryName,
+            @Param("gatherType") String gatherType,
+            Pageable pageable
+    );
+
+    // 회원이 작성한 보드
+    Page<Board> findByMember(Member member, Pageable pageable);
+
+    // 회원이 작성한 댓글이 포함된 보드
+    @Query("SELECT DISTINCT b FROM Board b " +
+            "JOIN FETCH b.comments c " +
+            "WHERE c.member = :member")
+    Page<Board> findByCommentingMember(@Param("member") Member member, Pageable pageable);
 }

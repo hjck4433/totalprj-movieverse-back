@@ -187,12 +187,49 @@ public class BoardService {
         );
         int totalPages = boards.getTotalPages();
 
-        // Ensure the last page is considered
         if (totalPages > 0 && page >= totalPages) {
-            // If the requested page is out of bounds, return the last page
+
             return totalPages - 1;
         }
 
+        return totalPages;
+    }
+
+    //회원이 작성한 보드/ 댓글 포함 보드 리스트
+    public List<BoardResDto> searchMemBoardList(Long id, String type, int page, int size) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당하는 회원이 없습니다."));
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("regdate"), Sort.Order.asc("title")));
+
+        List<BoardResDto> boardList = new ArrayList<>();
+        if(type.equalsIgnoreCase("written")){
+            Page<Board> boards = boardRepository.findByMember(member, pageable);
+            boardList = boards.stream()
+                    .map(this::convertEntityToDto)
+                    .collect(Collectors.toList());
+        }else if(type.equalsIgnoreCase("comment")) {
+            Page<Board> boards = boardRepository.findByCommentingMember(member, pageable);
+            boardList = boards.stream()
+                    .map(this::convertEntityToDto)
+                    .collect(Collectors.toList());
+        }
+
+        return boardList;
+    }
+
+    //회원이 작성한 보드/ 댓글 포함 보드 리스트 페이지 수
+    public int searchMemBoardPage(Long id, String type, Pageable pageable){
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당하는 회원이 없습니다."));
+        int totalPages = 0;
+        if (type.equalsIgnoreCase("written")){
+            Page<Board> boards = boardRepository.findByMember(member, pageable);
+            totalPages = boards.getTotalPages();
+        }else if (type.equalsIgnoreCase("comment")){
+            Page<Board> boards = boardRepository.findByCommentingMember(member, pageable);
+            totalPages = boards.getTotalPages();
+        }
         return totalPages;
     }
 }

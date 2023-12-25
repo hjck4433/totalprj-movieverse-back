@@ -6,6 +6,8 @@ import com.totalprj.movieverse.security.SecurityUtil;
 import com.totalprj.movieverse.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,6 +76,29 @@ public class BoardController {
     ) {
         List<BoardResDto> boardList = boardService.getProcessedBoardList(page, size, sort, keyword, categoryName, gatherType);
         return ResponseEntity.ok(boardList);
+    }
+
+    @GetMapping("/memboard/page")
+    public ResponseEntity<Integer> getMemBoardPages(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(defaultValue = "written") String type
+    ){
+        Long id = SecurityUtil.getCurrentMemberId();
+        PageRequest pageRequest = PageRequest.of(page,size);
+        int totalPages = boardService.searchMemBoardPage(id, type, pageRequest);
+        return ResponseEntity.ok(totalPages);
+    }
+
+    @GetMapping("/memboard/list")
+    public ResponseEntity<List<BoardResDto>> getMemBoardList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(defaultValue = "written") String type
+    ){
+        Long id = SecurityUtil.getCurrentMemberId();
+        List<BoardResDto> memBoardList = boardService.searchMemBoardList(id, type, page, size);
+        return ResponseEntity.ok(memBoardList);
     }
 
 
