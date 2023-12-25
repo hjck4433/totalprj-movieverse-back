@@ -48,7 +48,7 @@ public class BoardService {
             boardRepository.save(board);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("저장 중 오류 : {}", (Object) e.getStackTrace());
             return false;
         }
     }
@@ -73,6 +73,21 @@ public class BoardService {
         return boardResDto;
     }
 
+    // 조회 수
+    public boolean addCount(Long postId) {
+        try {
+            Board board = boardRepository.findById(postId)
+                    .orElseThrow(() -> new RuntimeException("해당하는 게시글이 없습니다."));
+            int count = board.getCount();
+            board.setCount(count+1);
+            boardRepository.save(board);
+            return true;
+        }catch (Exception e) {
+            log.error("페이지수 증가 중 오류 : {}", (Object) e.getStackTrace());
+            return false;
+        }
+    }
+
     // 게시글리스트 최신순 페이지네이션
     public List<BoardResDto> getRecentBoard(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("regDate"), Sort.Order.asc("title")));
@@ -93,7 +108,7 @@ public class BoardService {
             boardRepository.deleteById(id);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("보드 삭제 중 오류 : {}", (Object) e.getStackTrace());
             return false;
         }
     }
@@ -105,6 +120,8 @@ public class BoardService {
                     () -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
             Category category = categoryRepository.findByCategoryName(boardReqDto.getCategoryName()).orElseThrow(
                     () -> new RuntimeException("해당 카테고리가 존재하지 않습니다."));
+
+            log.info("수정 category : {}", category.getCategoryName());
 
             // 값이 null이 아니면 업데이트, null이면 기존 값 유지
             if (boardReqDto.getCategoryName() != null) {
@@ -126,7 +143,7 @@ public class BoardService {
             boardRepository.save(board);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("보드 수정 중 오류 : {}", (Object) e.getStackTrace());
             return false;
         }
     }
@@ -144,6 +161,7 @@ public class BoardService {
         boardResDto.setImage(board.getImage());
         boardResDto.setGatherType(board.getGatherType());
         boardResDto.setRegDate(board.getRegdate());
+        boardResDto.setCount(board.getCount());
         return boardResDto;
     }
 
@@ -232,4 +250,24 @@ public class BoardService {
         }
         return totalPages;
     }
+
+
+    // admin 영역
+
+    // 게시글 페이지네이션
+    public List<BoardResDto> getAdminBoardList(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        List<Board> boards = boardRepository.findAll(pageable).getContent();
+        List<BoardResDto> boardList = new ArrayList<>();
+        for(Board board : boards) {
+            boardList.add(convertEntityToDto(board));
+        }
+        return boardList;
+    }
+
+    // 총 페이지 수
+    public int getAdminBoardPage(Pageable pageable) {
+        return boardRepository.findAll(pageable).getTotalPages();
+    }
+
 }

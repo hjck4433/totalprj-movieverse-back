@@ -70,7 +70,13 @@ public class CommnetService {
             Comment comment = commentRepository.findById(commentReqDto.getId()).orElseThrow(
                     () -> new RuntimeException("해당 댓글이 존재하지 않습니다.")
             );
-            comment.setCommentContent(commentReqDto.getCommentContent());
+            String content = "";
+            if (commentReqDto.getCommentContent().isEmpty()){
+                content = comment.getCommentContent();
+            }else {
+                content = commentReqDto.getCommentContent();
+            }
+            comment.setCommentContent(content);
             commentRepository.save(comment);
             return true;
         } catch (Exception e) {

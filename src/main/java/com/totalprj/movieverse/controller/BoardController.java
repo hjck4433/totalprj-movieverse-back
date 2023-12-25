@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,9 +39,15 @@ public class BoardController {
     // 질문 ! boardList는 Back주소인데 리액트랑 안맞아도 상관없는거 아닌가요?
     @GetMapping("/post/{postId}")
     public ResponseEntity<BoardResDto> boardDetail(@PathVariable Long postId) {
-        log.info("게시판 게시글정보 조회 postId : ", postId);
+        log.info("게시판 게시글정보 조회 postId : {}", postId);
         BoardResDto boardResDto = boardService.getBoardDetail(postId);
         return ResponseEntity.ok(boardResDto);
+    }
+
+    @PutMapping("/post/counter")
+    public ResponseEntity<Boolean> boardCounter(@RequestBody Long postId) {
+        log.info("게시판 조회수 올리는 중 post Id : {}", postId);
+        return ResponseEntity.ok(boardService.addCount(postId));
     }
 
     // 게시판 수정
@@ -49,6 +56,13 @@ public class BoardController {
         log.info("boardReqDto : ", boardReqDto);
         return ResponseEntity.ok(boardService.modifyBoard(boardReqDto));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Boolean> deleteBoard(@PathVariable Long id){
+        log.info("게시글 삭제 id : {}", id);
+        return ResponseEntity.ok(boardService.deleteBoard(id));
+    }
+
 
     // 게시글 총 페이지 수
     @GetMapping("/totalpages")
@@ -99,6 +113,22 @@ public class BoardController {
         Long id = SecurityUtil.getCurrentMemberId();
         List<BoardResDto> memBoardList = boardService.searchMemBoardList(id, type, page, size);
         return ResponseEntity.ok(memBoardList);
+    }
+
+    // admin 영역
+    // 게시글 페이지네이션
+    @GetMapping("/admin/boardlist")
+    public ResponseEntity<List<BoardResDto>> adminBoardList(@RequestParam (defaultValue = "0") int page,
+                                                            @RequestParam (defaultValue = "10") int size){
+        return ResponseEntity.ok(boardService.getAdminBoardList(page, size));
+    }
+
+    // 총 페이지 수
+    @GetMapping("/admin/totalpage")
+    public ResponseEntity<Integer> adminBoardPages(@RequestParam (defaultValue = "0") int page,
+                                                   @RequestParam(defaultValue = "10") int size){
+        PageRequest pageRequest = PageRequest.of(page,size);
+        return ResponseEntity.ok(boardService.getAdminBoardPage(pageRequest));
     }
 
 
