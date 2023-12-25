@@ -11,8 +11,12 @@ import com.totalprj.movieverse.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.result.UpdateCountOutput;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +92,28 @@ public class CommnetService {
         }
     }
 
+    // 댓글 페이지 수
+    public int getCommentPage(Pageable pageable, Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new RuntimeException("해당하는 id 값이 없습니다. " + boardId)
+        );
+        Page<Comment> commentPage = commentRepository.findByBoard(board, pageable);
+        return commentPage.getTotalPages();
+    }
+
+    // 댓글 페이지네이션
+    public List<CommentResDto> getCommentPageList(int page, int size, Long boardId) {
+        Pageable pageable = PageRequest.of(page, size);
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new RuntimeException("해당하는 id 값이 없습니다. " + boardId)
+        );
+        List<Comment> comments = commentRepository.findByBoard(board, pageable).getContent();
+        List<CommentResDto> commentResDtos = new ArrayList<>();
+        for(Comment comment : comments) {
+            commentResDtos.add(convertEntityToDto(comment));
+        }
+        return commentResDtos;
+    }
 
     // 댓글 엔티티를 Dto로 변환
     public CommentResDto convertEntityToDto (Comment comment) {

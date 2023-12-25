@@ -6,6 +6,7 @@ import com.totalprj.movieverse.security.SecurityUtil;
 import com.totalprj.movieverse.service.CommnetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,4 +47,24 @@ public class CommentController {
         boolean result = commnetService.commentDelete(id);
         return ResponseEntity.ok(result);
     }
+
+    // 댓글 총 페이지 수
+    @GetMapping("/page/{boardId}")
+    public ResponseEntity<Integer> commentPageCount(@PathVariable Long boardId,
+                                                    @RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "5") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        int pageCnt = commnetService.getCommentPage(pageRequest, boardId);
+        return ResponseEntity.ok(pageCnt);
+    }
+
+    // 댓글 페이지네이션
+    @GetMapping("/page/list/{boardId}")
+    public ResponseEntity<List<CommentResDto>> commentPageList(@PathVariable Long boardId,
+                                                               @RequestParam(defaultValue = "0") int page,
+                                                               @RequestParam(defaultValue = "5") int size) {
+        List<CommentResDto> list = commnetService.getCommentPageList(page, size, boardId);
+        return ResponseEntity.ok(list);
+    }
+
 }
