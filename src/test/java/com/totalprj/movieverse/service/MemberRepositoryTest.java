@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -48,5 +49,74 @@ public class MemberRepositoryTest {
         em.flush();
         em.clear();
         System.out.println("testMember 결과 : " +testMember);
+    }
+
+    @Test
+    @DisplayName("이메일 중복체크 테스트")
+    public void isUniqeEmailTest() {
+
+        Member member = createMemberInfo();
+        memberRepository.save(member);
+        boolean isUnique = memberRepository.existsByEmail("test1@gmail.com");
+
+        em.flush();
+        em.clear();
+        System.out.println("isUnique 결과 : " +isUnique);
+
+    }
+
+
+    @Test
+    @DisplayName("닉네임 중복 테스트")
+    public void isUniqueAliasTest(){
+        Member member = createMemberInfo();
+        memberRepository.save(member);
+        boolean isAliasUnique = memberRepository.existsByAlias("햄스터");
+
+        em.flush();
+        em.clear();
+        System.out.println("isAliasUnique결과 : " +isAliasUnique);
+
+    }
+
+    @Test
+    @DisplayName("전화번호 중복 테스트")
+    public void isUniquePhoneTest(){
+        Member member = createMemberInfo();
+        memberRepository.save(member);
+        boolean isPhoneUnique = memberRepository.existsByPhone("010-1234-5678");
+
+        em.flush();
+        em.clear();
+        System.out.println("isPhoneUnique 결과 : " +isPhoneUnique);
+
+    }
+
+    @Test
+    @DisplayName("내 정보 요청 테스트")
+    public void memberDetailTest() {
+
+        Member member = createMemberInfo();
+        memberRepository.save(member);
+        Optional<Member> detailMember = memberRepository.findById(1L);
+
+        em.flush();
+        em.clear();
+        System.out.println(" memberDetailTest결과 : " +detailMember);
+
+    }
+
+    @Test
+    @DisplayName("이메일과 비밀번호로 회원 찾기 테스트")
+    public void findMemberByEmailAndPasswordTest() {
+        Member member = createMemberInfo();
+        memberRepository.save(member);
+
+        Member foundMember = memberRepository.findByEmailAndPassword("test@gmail.com", "Test1234!").orElseThrow();
+
+        em.flush();
+        em.clear();
+
+        System.out.println("찾은 회원: " + foundMember);
     }
 }
