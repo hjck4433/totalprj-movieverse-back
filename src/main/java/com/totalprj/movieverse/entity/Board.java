@@ -2,7 +2,7 @@ package com.totalprj.movieverse.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "board")
 @Getter
 @Setter
-@ToString
+
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
