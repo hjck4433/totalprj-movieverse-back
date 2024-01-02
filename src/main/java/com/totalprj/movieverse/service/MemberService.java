@@ -65,7 +65,6 @@ public class MemberService {
             member.setPhone(memberReqDto.getPhone());
             member.setAddr(memberReqDto.getAddr());
             member.setImage(memberReqDto.getImage());
-            member.setRegDate(LocalDateTime.now());
             memberRepository.save(member);
             return true;
         }catch(Exception e){
